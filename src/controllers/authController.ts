@@ -31,6 +31,14 @@ const loginUserScheme = {
     password: Joi.string().required().label("Password"),
 }
 
+export const requestEmailOtpController = async (request: Request, response: Response)=>{
+        
+}
+
+export const requestPhoneOtpController = async (request: Request, response: Response)=>{
+        
+}
+
 export const registerController = async (request: Request, response: Response)=>{
     const data: createUser = request.body;
     

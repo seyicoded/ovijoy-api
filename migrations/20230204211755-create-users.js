@@ -10,16 +10,55 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       first_name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: true,
       },
       last_name: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: true,
       },
       email: {
         type: Sequelize.STRING
       },
+      phone: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      dob: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      gender: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      email_otp: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      phone_otp: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      email_otp_validated: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      phone_otp_validated: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
+      photo: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      status: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+      },
       password: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: true,
       },
       createdAt: {
         allowNull: false,
