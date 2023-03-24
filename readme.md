@@ -1,4 +1,4 @@
-# backend-assessment
+# Ovijoy API
 
 steps to get it running
 - run npm install or yarn
