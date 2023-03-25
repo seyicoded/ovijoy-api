@@ -8,21 +8,27 @@ import { generateOtp } from '../generic/functions';
 import { sendMail } from '../generic/sendMail';
 import { generateOtpMailTemplate } from '../templates/mails/otp';
 import { generateSmsUseCase, sendSMS } from '../generic/termii';
+import {Op} from 'sequelize'
+import { USER_ROLE } from '../config/constants/enum/auth';
 
 var jwt = require('jsonwebtoken');
 
 type createUser = {
-    first_name: string;
-    last_name: string;
     email: string;
+    username: string;
+    phone: string;
+    dob: string;
+    gender: string;
     password: string;
 }
 
 const createUserScheme = {
-    first_name: Joi.string().required().label("First Name"),
-    last_name: Joi.string().required().label("Last Name"),
     email: Joi.string().required().label("Email"),
     password: Joi.string().required().label("Password"),
+    username: Joi.string().required().label("username"),
+    phone: Joi.string().required().label("phone"),
+    dob: Joi.string().required().label("dob"),
+    gender: Joi.string().required().label("gender"),
 }
 
 type loginUser = {
@@ -150,13 +156,16 @@ export const registerController = async (request: Request, response: Response)=>
     // check if user exist
     const user = await db.users.findOne({
         where: {
-            email: value.email
+            [Op.or]: [
+                { email: value.email },
+                { username: value.username }
+            ]
         }
     });
 
     if(user){
         return WrapperResponse("error", {
-            message: "User already exist",
+            message: "User already exist with same username/email",
             status: "failed"
         }, response)
     }
@@ -167,8 +176,14 @@ export const registerController = async (request: Request, response: Response)=>
         email: value.email,
         password: hashPassword,
         first_name: value.first_name,
-        last_name: value.last_name,
+        username: value.username,
+        phone: value.phone,
+        dob: value.dob,
+        gender: value.gender,
+        role: USER_ROLE.USER
     })
+
+
 
     if(!newUser){
         return WrapperResponse("error", {
@@ -177,9 +192,18 @@ export const registerController = async (request: Request, response: Response)=>
         }, response)    
     }
 
+    // get jwt token
+    const jwtToken = jwt.sign({
+        data: newUser
+    }, process.env.JWT_SECRET);
+
     return WrapperResponse("success", {
         message: "User Created Successfully",
-        status: "success"
+        status: "success",
+        payload: {
+            token: jwtToken,
+            user: newUser
+        },
     }, response)
 }
 
@@ -199,7 +223,10 @@ export const loginController = async (request: Request, response: Response)=>{
     // check if user exist
     const user = await db.users.findOne({
         where: {
-            email: value.email
+            [Op.or]: [
+                { email: value.email },
+                { username: value.email },
+            ]
         }
     });
 
