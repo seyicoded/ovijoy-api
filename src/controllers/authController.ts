@@ -4,6 +4,10 @@ import db from '../../models';
 import { WrapperResponse } from '../helper/wrapResponse';
 import bcryptjs from 'bcryptjs'
 import 'dotenv/config'
+import { generateOtp } from '../generic/functions';
+import { sendMail } from '../generic/sendMail';
+import { generateOtpMailTemplate } from '../templates/mails/otp';
+import { generateSmsUseCase, sendSMS } from '../generic/termii';
 
 var jwt = require('jsonwebtoken');
 
@@ -31,12 +35,101 @@ const loginUserScheme = {
     password: Joi.string().required().label("Password"),
 }
 
+const userExist = async (email: string)=>{
+    const _user = await db.users.findOne({
+        where: {
+            email: (email || "").toLowerCase()
+        }
+    });
+
+    if(_user){
+        return {
+            exist: true,
+            user: _user
+        }
+    }else{
+        return {
+            exist: false
+        }
+    }
+}
+
 export const requestEmailOtpController = async (request: Request, response: Response)=>{
-        
+    const {error, value} = Joi.object({
+        email: Joi.string().email().required().label("Email"),
+    }).validate(request.body)
+
+    if(error){
+        return WrapperResponse("error", {
+            message: error.message,
+            status: "failed"
+        }, response)
+    }
+
+    if( (await userExist(value.email)).exist ){
+        // account already exist
+        return WrapperResponse("error", {
+            message: "Account already exist",
+            status: "failed"
+        }, response)
+    }
+
+    // generate otp and send
+    const otp = await generateOtp(6);
+    const mailHTML = generateOtpMailTemplate(otp);
+    await sendMail({
+        subject: 'OviJoy Registration OTP',
+        to: value.email,
+        html: mailHTML,
+    });
+
+
+    return WrapperResponse("success", {
+        message: "OTP SENT",
+        status: "success",
+        payload: {
+            otp
+        }
+    }, response)
 }
 
 export const requestPhoneOtpController = async (request: Request, response: Response)=>{
-        
+    const {error, value} = Joi.object({
+        cc: Joi.string().required().label("Country Code"),
+        phone: Joi.string().required().label("Phone Number"),
+    }).validate(request.body)
+
+    if(error){
+        return WrapperResponse("error", {
+            message: error.message,
+            status: "failed"
+        }, response)
+    }
+    
+    // send otp to phone number then return data
+    const otp = await generateOtp(6);
+    const sent = await sendSMS({
+        sms: generateSmsUseCase(otp),
+        to: `${value.cc}${value.phone}`
+    })
+
+    if(!sent){
+        return WrapperResponse("error", {
+            message: "Termii rejected this sms",
+            status: "failed",
+            payload: {
+                otp
+            }
+        }, response)
+    }
+
+    return WrapperResponse("success", {
+        message: "OTP SENT",
+        status: "success",
+        payload: {
+            otp
+        }
+    }, response)
 }
 
 export const registerController = async (request: Request, response: Response)=>{
