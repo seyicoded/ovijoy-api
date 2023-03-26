@@ -72,7 +72,8 @@ export const requestEmailOtpController = async (request: Request, response: Resp
         }, response)
     }
 
-    if( (await userExist(value.email)).exist ){
+    // if( (await userExist(value.email)).exist ){
+    if(false){
         // account already exist
         return WrapperResponse("error", {
             message: "Account already exist",

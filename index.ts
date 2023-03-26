@@ -3,6 +3,7 @@ import dB from './models/index'
 import router from './src/routes';
 import winston from 'winston'
 import 'dotenv/config'
+import { run } from './src/helper/defaultRunner';
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
@@ -14,6 +15,9 @@ app.use(express.json())
 
 // init database
 dB.sequelize.sync({alter: true})
+
+// create default data
+run()
 
 // init route
 app.use(router)
