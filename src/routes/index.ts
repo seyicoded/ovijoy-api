@@ -1,5 +1,5 @@
 import express from 'express'
-import { loginController, registerController, requestPhoneOtpController, requestEmailOtpController } from '../controllers/authController';
+import { loginController, registerController, requestPhoneOtpController, requestEmailOtpController, changePasswordController } from '../controllers/authController';
 import { alterInvitation, createGroup, inviteGroup, myCreatedGroup, viewInvitation } from '../controllers/groupController';
 import { authMiddleWare } from '../middleware/auth';
 
@@ -13,6 +13,7 @@ router.post("/otp/phone", requestPhoneOtpController);
 
 router.post("/register", registerController)
 router.post("/login", loginController)
+router.post("/change-password", changePasswordController)
 
 // auth route
 router.post("/group/create", authMiddleWare, createGroup)

@@ -10,6 +10,7 @@ import { generateOtpMailTemplate } from '../templates/mails/otp';
 import { generateSmsUseCase, sendSMS } from '../generic/termii';
 import {Op} from 'sequelize'
 import { USER_ROLE } from '../config/constants/enum/auth';
+import moment from 'moment'
 
 var jwt = require('jsonwebtoken');
 
@@ -39,6 +40,18 @@ type loginUser = {
 const loginUserScheme = {
     email: Joi.string().required().label("Email"),
     password: Joi.string().required().label("Password"),
+}
+
+type changePassword = {
+    email: string;
+    password: string;
+    resetPasswordToken: string;
+}
+
+const changePasswordScheme = {
+    email: Joi.string().required().label("Email"),
+    password: Joi.string().required().label("Password"),
+    resetPasswordToken: Joi.string().required().label("Token"),
 }
 
 const userExist = async (email: string)=>{
@@ -84,6 +97,12 @@ export const requestEmailOtpController = async (request: Request, response: Resp
     // generate otp and send
     const otp = await generateOtp(6);
     const mailHTML = generateOtpMailTemplate(otp);
+
+    const resetPasswordToken = jwt.sign({
+        time: moment().add(20, 'minutes'),
+        email: value.email
+    }, process.env.JWT_SECRET);
+
     await sendMail({
         subject: 'OviJoy Registration OTP',
         to: value.email,
@@ -95,7 +114,8 @@ export const requestEmailOtpController = async (request: Request, response: Resp
         message: "OTP SENT",
         status: "success",
         payload: {
-            otp
+            otp,
+            resetPasswordToken
         }
     }, response)
 }
@@ -130,11 +150,17 @@ export const requestPhoneOtpController = async (request: Request, response: Resp
         }, response)
     }
 
+    const resetPasswordToken = jwt.sign({
+        time: moment().add(20, 'minutes'),
+        email: value.email
+    }, process.env.JWT_SECRET);
+
     return WrapperResponse("success", {
         message: "OTP SENT",
         status: "success",
         payload: {
-            otp
+            otp,
+            resetPasswordToken
         }
     }, response)
 }
@@ -259,4 +285,77 @@ export const loginController = async (request: Request, response: Response)=>{
         },
         status: "success"
     }, response)
+}
+
+export const changePasswordController = async (request: Request, response: Response)=>{
+    const data: changePassword = request.body;
+    
+    // validate 
+    const {error, value} = Joi.object(changePasswordScheme).validate(data)
+
+    if(error){
+        return WrapperResponse("error", {
+            message: error.message,
+            status: "failed"
+        }, response)
+    }
+
+    // validate token
+    try{
+        var decoded = jwt.verify(value.resetPasswordToken, process.env.JWT_SECRET);
+        const timeToExpire = decoded.time;
+        const decodedEmail = decoded.email;
+
+        console.log(moment(timeToExpire).isBefore(moment( (new Date()).toISOString() )))
+
+        if(moment(timeToExpire).isBefore(moment( (new Date()).toISOString() ))){
+            // existed
+            return WrapperResponse("error", {
+                message: "Token is Expired",
+                status: "failed"
+            }, response)
+        }
+
+        if(decodedEmail != value.email){
+            return WrapperResponse("error", {
+                message: "Token not for this user",
+                status: "failed"
+            }, response)
+        }
+
+        // check if user exist and change password
+        const user = await db.users.findOne({
+            where: {
+                [Op.or]: [
+                    { email: value.email },
+                    { username: value.email },
+                ]
+            }
+        });
+
+        if(!user){
+            return WrapperResponse("error", {
+                message: "User doesn't exist",
+                status: "failed"
+            }, response)
+        }
+
+        const hashPassword = bcryptjs.hashSync(value.password, 8)
+
+        user.password = hashPassword;
+
+        await user.save();
+
+        return WrapperResponse("success", {
+            message: "password changed successful",
+            status: "success"
+        }, response)
+    }catch(e){
+        return WrapperResponse("error", {
+            message: "Token is Invalid",
+            status: "failed"
+        }, response)
+    }
+    
+    
 }
