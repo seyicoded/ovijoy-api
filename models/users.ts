@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       // console.log(models, "models")
-      // (models.users).hasMany(models.groups)
+      (models.users).hasMany(models.post);
+      (models.users).hasMany(models.status);
             
     }
   }
