@@ -4,6 +4,7 @@ import router from './src/routes';
 import winston from 'winston'
 import 'dotenv/config'
 import { run } from './src/helper/defaultRunner';
+import path from 'path';
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
@@ -21,6 +22,10 @@ run()
 
 // init route
 app.use(router)
+
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
+// console.log(path.join(__dirname, 'uploads'))
+// app.use(express.static(  process.cwd() + 'uploads' ));
 
 // app.get('/', (req: Request, res: Response)=>{
 //     res.send('Hello, this is Express + TypeScript');

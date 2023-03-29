@@ -2,10 +2,11 @@ import { Request, Response, NextFunction} from 'express'
 import { WrapperResponse } from '../helper/wrapResponse';
 import "dotenv/config"
 import { USER_ROLE } from '../config/constants/enum/auth';
+import db from '../../models';
 
 var jwt = require('jsonwebtoken');
 
-export const authMiddleWare = (req: Request|any, res: Response, next: NextFunction)=>{
+export const authMiddleWare = async (req: Request|any, res: Response, next: NextFunction)=>{
     if (!req.headers.authorization) {
         return WrapperResponse("error", {
             message: "Authorization Token is Required",
@@ -17,7 +18,8 @@ export const authMiddleWare = (req: Request|any, res: Response, next: NextFuncti
     // validate jwt
     try{
         var decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded.data;
+        // req.user = decoded.data;
+        req.user = await getUser(decoded.data.id);
     }catch(e){
         return WrapperResponse("error", {
             message: "Authorization Token is Invalid",
@@ -28,7 +30,7 @@ export const authMiddleWare = (req: Request|any, res: Response, next: NextFuncti
     next();
 }
 
-export const authAdminMiddleWare = (req: Request|any, res: Response, next: NextFunction)=>{
+export const authAdminMiddleWare = async (req: Request|any, res: Response, next: NextFunction)=>{
     if (!req.headers.authorization) {
         return WrapperResponse("error", {
             message: "Authorization Token is Required",
@@ -40,7 +42,7 @@ export const authAdminMiddleWare = (req: Request|any, res: Response, next: NextF
     // validate jwt
     try{
         var decoded = jwt.verify(token, process.env.JWT_SECRET);
-        req.user = decoded.data;
+        req.user = await getUser(decoded.data.id);
 
         if(decoded.data.role !== USER_ROLE.ADMIN){
             return WrapperResponse("error", {
@@ -56,4 +58,12 @@ export const authAdminMiddleWare = (req: Request|any, res: Response, next: NextF
     }
 
     next();
+}
+
+const getUser = async (id: string|number)=>{
+    return db.users.findOne({
+        where: {
+            id
+        }
+    })
 }

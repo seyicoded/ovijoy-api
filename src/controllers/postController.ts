@@ -5,6 +5,7 @@ import { CATEGORY_STATUS } from "../config/constants/enum/category";
 import { WrapperResponse } from "../helper/wrapResponse";
 import fs from 'fs'
 import path from 'path'
+import { POST_STATUS } from "../config/constants/enum/others";
 // import formidable from 'formidable'
 const formidable = require('formidable');
 
@@ -48,9 +49,18 @@ export const createPostCategory = async (request: Request|any, response: Respons
 
 
             // create file
-            await db.post.create({
-                
+            const __user = (request.user);
+            const __post = await db.post.create({
+                caption: value.caption,
+                media: `uploads/posts/${newFilename}`,
+                mediaType: fileType,
+                hashtags: value.hashtags,
+                country: value.country,
+                status: POST_STATUS.ACTIVE,
+                userId: __user.id
             })
+
+            // __post.add(__user)
 
             // console.log(__dirname+ '/../../uploads/posts')
             // await fs.mkdir(_path, (err)=>{
@@ -60,16 +70,16 @@ export const createPostCategory = async (request: Request|any, response: Respons
             //     console.log(err)
             // })
         
-            response.writeHead(200, { 'Content-Type': 'application/json' });
-            response.end(JSON.stringify({ fields, files }, null, 2));
+            // response.writeHead(200, { 'Content-Type': 'application/json' });
+            // response.end(JSON.stringify({ fields, files }, null, 2));
+
+            return WrapperResponse("success", {
+                message: "Created Successfully",
+                status: "success",
+            }, response)
             
         });
         
-        // return WrapperResponse("success", {
-        //     message: "Created Successfully",
-        //     status: "success",
-        //     payload: __data
-        // }, response)
     }catch(e){
         return WrapperResponse("error", {
             message: "Error",
