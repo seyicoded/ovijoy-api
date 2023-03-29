@@ -17,6 +17,8 @@ module.exports = (sequelize, DataTypes) => {
   }
   Status.init({
     caption: DataTypes.STRING,
+    media: DataTypes.STRING,
+    mediaType: DataTypes.STRING,
     hashtags: DataTypes.STRING,
     country: DataTypes.STRING,
     status: DataTypes.INTEGER,

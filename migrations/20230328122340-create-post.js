@@ -12,6 +12,12 @@ module.exports = {
       caption: {
         type: Sequelize.STRING
       },
+      media: {
+        type: Sequelize.STRING
+      },
+      mediaType: {
+        type: Sequelize.STRING
+      },
       hashtags: {
         type: Sequelize.STRING
       },

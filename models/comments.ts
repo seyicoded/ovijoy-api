@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       (models.comments).belongsTo(models.users);
       (models.comments).belongsTo(models.post);
       (models.comments).belongsTo(models.status);
+      (models.comments).hasMany(models.likes);
     }
   }
   comments.init({

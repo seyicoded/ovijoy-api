@@ -14,6 +14,8 @@ module.exports = (sequelize, DataTypes) => {
       // console.log(models, "models")
       (models.users).hasMany(models.post);
       (models.users).hasMany(models.status);
+      (models.users).hasMany(models.comments);
+      (models.users).hasMany(models.likes);
             
     }
   }

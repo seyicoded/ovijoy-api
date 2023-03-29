@@ -2,6 +2,7 @@ import express from 'express'
 import { loginController, registerController, requestPhoneOtpController, requestEmailOtpController, changePasswordController } from '../controllers/authController';
 import { createCatCategory, deleteCatCategory, editCatCategory, getCatCategory } from '../controllers/catController';
 import { alterInvitation, createGroup, inviteGroup, myCreatedGroup, viewInvitation } from '../controllers/groupController';
+import { createPostCategory } from '../controllers/postController';
 import { authAdminMiddleWare, authMiddleWare } from '../middleware/auth';
 
 const router = express.Router()
@@ -26,6 +27,10 @@ router.post("/category", authAdminMiddleWare, createCatCategory)
 router.delete("/category/:id", authAdminMiddleWare, deleteCatCategory)
 router.patch("/category/:id", authAdminMiddleWare, editCatCategory)
 
+// **** category **** 
+
+// admin only ****
+router.post("/post", authAdminMiddleWare, createPostCategory) 
 
 
 // auth route::old
