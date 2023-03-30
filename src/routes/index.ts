@@ -1,8 +1,11 @@
 import express from 'express'
 import { loginController, registerController, requestPhoneOtpController, requestEmailOtpController, changePasswordController } from '../controllers/authController';
 import { createCatCategory, deleteCatCategory, editCatCategory, getCatCategory } from '../controllers/catController';
+import { toggleCommentController } from '../controllers/commentController';
 import { alterInvitation, createGroup, inviteGroup, myCreatedGroup, viewInvitation } from '../controllers/groupController';
-import { createPostCategory } from '../controllers/postController';
+import { toggleLikeController } from '../controllers/likeController';
+import { createPostController, deletePostController, editPostController, getPostController } from '../controllers/postController';
+import { createStatusController, deleteStatusController, editStatusController, getStatusController } from '../controllers/statusController';
 import { authAdminMiddleWare, authMiddleWare } from '../middleware/auth';
 
 const router = express.Router()
@@ -28,9 +31,26 @@ router.delete("/category/:id", authAdminMiddleWare, deleteCatCategory)
 router.patch("/category/:id", authAdminMiddleWare, editCatCategory)
 
 // **** category **** 
-
+router.get("/post", authMiddleWare, getPostController) 
 // admin only ****
-router.post("/post", authAdminMiddleWare, createPostCategory) 
+router.post("/post", authAdminMiddleWare, createPostController) 
+router.patch("/post", authAdminMiddleWare, editPostController) 
+router.delete("/post/:id", authAdminMiddleWare, deletePostController) 
+
+// **** status **** 
+router.get("/status", authMiddleWare, getStatusController) 
+// admin only ****
+router.post("/status", authAdminMiddleWare, createStatusController) 
+router.patch("/status", authAdminMiddleWare, editStatusController) 
+router.delete("/status/:id", authAdminMiddleWare, deleteStatusController) 
+
+// generic
+// **** likes **** 
+router.post("/like/:type/:id", authMiddleWare, toggleLikeController) 
+
+// **** comment **** 
+router.post("/comment/:type/:id", authMiddleWare, toggleCommentController) 
+
 
 
 // auth route::old

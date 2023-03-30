@@ -24,12 +24,8 @@ run()
 app.use(router)
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
-// console.log(path.join(__dirname, 'uploads'))
-// app.use(express.static(  process.cwd() + 'uploads' ));
 
-// app.get('/', (req: Request, res: Response)=>{
-//     res.send('Hello, this is Express + TypeScript');
-// });
+// @TODO: create a cron action that checks for post and status older than 24 hours and disable them
 
 app.listen(port, ()=> {
 console.log(`[Server]: I am running at https://localhost:${port}`);

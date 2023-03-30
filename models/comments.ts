@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       (models.comments).belongsTo(models.post);
       (models.comments).belongsTo(models.status);
       (models.comments).hasMany(models.likes);
+      (models.comments).hasMany(models.comments, {as: 'commentHost'});
     }
   }
   comments.init({
