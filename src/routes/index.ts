@@ -5,6 +5,7 @@ import { toggleCommentController } from '../controllers/commentController';
 import { alterInvitation, createGroup, inviteGroup, myCreatedGroup, viewInvitation } from '../controllers/groupController';
 import { toggleLikeController } from '../controllers/likeController';
 import { createPostController, deletePostController, editPostController, getPostController } from '../controllers/postController';
+import { getProfileController, updateProfileController, updateProfileImageController } from '../controllers/profileController';
 import { createStatusController, deleteStatusController, editStatusController, getStatusController } from '../controllers/statusController';
 import { authAdminMiddleWare, authMiddleWare } from '../middleware/auth';
 
@@ -50,6 +51,15 @@ router.post("/like/:type/:id", authMiddleWare, toggleLikeController)
 
 // **** comment **** 
 router.post("/comment/:type/:id", authMiddleWare, toggleCommentController) 
+
+
+// generic
+// **** profile **** 
+router.post("/profile/update", authMiddleWare, updateProfileImageController) 
+router.get("/profile", authMiddleWare, getProfileController) 
+router.patch("/profile", authMiddleWare, updateProfileController) 
+
+
 
 
 

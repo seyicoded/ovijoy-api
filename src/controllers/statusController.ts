@@ -218,6 +218,9 @@ export const getStatusController = async (request: Request|any, response: Respon
                             model: db.likes
                         },
                         {
+                            model: db.users
+                        },
+                        {
                             model: db.comments,
                             as: 'commentHost'
                         }

@@ -212,6 +212,9 @@ export const getPostController = async (request: Request|any, response: Response
                             model: db.likes
                         },
                         {
+                            model: db.users
+                        },
+                        {
                             model: db.comments,
                             as: 'commentHost'
                         }
