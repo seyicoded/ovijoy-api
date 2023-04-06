@@ -8,6 +8,7 @@ import { createPostController, deletePostController, editPostController, getPost
 import { getProfileController, updateProfileController, updateProfileImageController } from '../controllers/profileController';
 import { createStatusController, deleteStatusController, editStatusController, getStatusController } from '../controllers/statusController';
 import { authAdminMiddleWare, authMiddleWare } from '../middleware/auth';
+import { createGiveawayController, deleteGiveawayController, editGiveawayController, getGiveawayController } from '../controllers/giveawayController';
 
 const router = express.Router()
 
@@ -44,6 +45,14 @@ router.get("/status", authMiddleWare, getStatusController)
 router.post("/status", authAdminMiddleWare, createStatusController) 
 router.patch("/status", authAdminMiddleWare, editStatusController) 
 router.delete("/status/:id", authAdminMiddleWare, deleteStatusController) 
+
+// **** category **** 
+router.get("/giveaway", authMiddleWare, getGiveawayController) 
+// admin only ****
+router.post("/giveaway", authAdminMiddleWare, createGiveawayController) 
+router.patch("/giveaway", authAdminMiddleWare, editGiveawayController) 
+router.delete("/giveaway/:id", authAdminMiddleWare, deleteGiveawayController) 
+
 
 // generic
 // **** likes **** 
