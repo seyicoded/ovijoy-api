@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      (models.giveaway).belongsTo(models.users);
+      (models.giveaway).belongsTo(models.category);
+      (models.giveaway).hasMany(models.likes);
+      (models.giveaway).hasMany(models.comments);
     }
   }
   giveaway.init({

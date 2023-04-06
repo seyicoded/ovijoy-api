@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       (models.likes).belongsTo(models.post);
       (models.likes).belongsTo(models.status);
       (models.likes).belongsTo(models.comments);
+      (models.likes).belongsTo(models.giveaway);
     }
   }
   likes.init({
