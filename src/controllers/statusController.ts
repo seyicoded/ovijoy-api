@@ -53,7 +53,7 @@ export const createStatusController = async (request: Request|any, response: Res
             const __user = (request.user);
             const __status = await db.status.create({
                 caption: value.caption,
-                media: `uploads/posts/${newFilename}`,
+                media: `uploads/status/${newFilename}`,
                 mediaType: fileType,
                 hashtags: value.hashtags,
                 country: value.country,
@@ -118,7 +118,7 @@ export const editStatusController = async (request: Request|any, response: Respo
                 
                 const __status = await db.status.update({
                     caption: value.caption,
-                    media: `uploads/posts/${newFilename}`,
+                    media: `uploads/status/${newFilename}`,
                     mediaType: fileType,
                     hashtags: value.hashtags,
                     country: value.country,
