@@ -10,17 +10,17 @@ import { POST_STATUS, STATUS_STATUS } from "../config/constants/enum/others";
 const formidable = require('formidable');
 
 
-export const createStatusController = async (request: Request|any, response: Response)=>{
-    try{
+export const createStatusController = async (request: Request | any, response: Response) => {
+    try {
 
         const data = request.body;
 
         const _path = __dirname + '/../../uploads/status';
-        const form = formidable({ 
+        const form = formidable({
             multiples: true,
             uploadDir: _path,
-         });
-        
+        });
+
         form.parse(request, async (err, fields, files) => {
             if (err) {
                 console.log(err)
@@ -28,19 +28,19 @@ export const createStatusController = async (request: Request|any, response: Res
                     message: "Error",
                     status: "failed"
                 }, response)
-              return;
+                return;
             }
 
-            const {newFilename, mimetype: fileType} = files.media;
+            const { newFilename, mimetype: fileType } = files.media;
 
-            const {error, value} = Joi.object({
+            const { error, value } = Joi.object({
                 caption: Joi.string().required().label("caption"),
                 category_id: Joi.string().required().label("category id"),
                 hashtags: Joi.string().required().label("hashtags"),
                 country: Joi.string().required().label("country"),
             }).validate(fields)
-    
-            if(error){
+
+            if (error) {
                 console.log(error)
                 return WrapperResponse("error", {
                     message: error.message,
@@ -66,10 +66,10 @@ export const createStatusController = async (request: Request|any, response: Res
                 message: "Created Successfully",
                 status: "success",
             }, response)
-            
+
         });
-        
-    }catch(e){
+
+    } catch (e) {
         console.log(e)
         return WrapperResponse("error", {
             message: "Error",
@@ -78,26 +78,26 @@ export const createStatusController = async (request: Request|any, response: Res
     }
 }
 
-export const editStatusController = async (request: Request|any, response: Response)=>{
-    try{
+export const editStatusController = async (request: Request | any, response: Response) => {
+    try {
         const _path = __dirname + '/../../uploads/status';
-        const form = formidable({ 
+        const form = formidable({
             multiples: true,
             uploadDir: _path,
-         });
+        });
 
-         form.parse(request, async (err, fields, files) => {
+        form.parse(request, async (err, fields, files) => {
             if (err) {
                 return WrapperResponse("error", {
                     message: "Error",
                     status: "failed"
                 }, response)
-              return;
+                return;
             }
 
-            const {newFilename, mimetype: fileType} = files?.media || {};
+            const { newFilename, mimetype: fileType } = files?.media || {};
 
-            const {error, value} = Joi.object({
+            const { error, value } = Joi.object({
                 caption: Joi.string().required().label("caption"),
                 hashtags: Joi.string().required().label("hashtags"),
                 country: Joi.string().required().label("country"),
@@ -105,8 +105,8 @@ export const editStatusController = async (request: Request|any, response: Respo
                 post_id: Joi.any().required().label("post id"),
                 category_id: Joi.string().required().label("category id"),
             }).validate(fields)
-    
-            if(error){
+
+            if (error) {
                 return WrapperResponse("error", {
                     message: error.message,
                     status: "failed"
@@ -114,8 +114,8 @@ export const editStatusController = async (request: Request|any, response: Respo
             }
 
             const __user = (request.user);
-            if((value?.hasMedia || 'no').toLowerCase() === 'yes'){
-                
+            if ((value?.hasMedia || 'no').toLowerCase() === 'yes') {
+
                 const __status = await db.status.update({
                     caption: value.caption,
                     media: `uploads/status/${newFilename}`,
@@ -129,7 +129,7 @@ export const editStatusController = async (request: Request|any, response: Respo
                         id: value.post_id
                     }
                 })
-            }else{
+            } else {
                 const __status = await db.status.update({
                     caption: value.caption,
                     hashtags: value.hashtags,
@@ -149,10 +149,10 @@ export const editStatusController = async (request: Request|any, response: Respo
                 message: "Edited Successfully",
                 status: "success",
             }, response)
-            
+
         });
 
-    }catch(e){
+    } catch (e) {
         return WrapperResponse("error", {
             message: "Error",
             status: "failed"
@@ -160,31 +160,31 @@ export const editStatusController = async (request: Request|any, response: Respo
     }
 }
 
-export const deleteStatusController = async (request: Request|any, response: Response)=>{
-    try{
+export const deleteStatusController = async (request: Request | any, response: Response) => {
+    try {
         // validate 
-        const {error, value} = Joi.object({
+        const { error, value } = Joi.object({
             id: Joi.number().required().label("post id")
         }).validate(request.params)
 
-        if(error){
+        if (error) {
             return WrapperResponse("error", {
                 message: error.message,
                 status: "failed"
             }, response)
         }
-        
+
         await db.status.destroy({
             where: {
                 id: value.id
             }
         });
-    
+
         return WrapperResponse("success", {
             message: "Deleted Successfully",
             status: "success"
         }, response)
-    }catch(e){
+    } catch (e) {
         return WrapperResponse("error", {
             message: "Error",
             status: "failed"
@@ -192,8 +192,8 @@ export const deleteStatusController = async (request: Request|any, response: Res
     }
 }
 
-export const getStatusController = async (request: Request|any, response: Response)=>{
-    try{
+export const getStatusController = async (request: Request | any, response: Response) => {
+    try {
 
         const user = request.user;
         const allPostStatus = await db.status.findAll({
@@ -230,21 +230,21 @@ export const getStatusController = async (request: Request|any, response: Respon
         })
 
         const filteredStatus = [];
-        
+
         for (let i = 0; i < allPostStatus.length; i++) {
             const _status = allPostStatus[i].get();
-            
+
             const userHasLiked = (await db.likes.findOne({
                 where: {
                     userId: user.id,
-                    postId: _status.id
+                    statusId: _status.id
                 }
             })) ? true : false;
 
             const userHasCommented = (await db.comments.findOne({
                 where: {
                     userId: user.id,
-                    postId: _status.id
+                    statusId: _status.id
                 }
             })) ? true : false;
 
@@ -260,7 +260,7 @@ export const getStatusController = async (request: Request|any, response: Respon
             status: "success",
             payload: filteredStatus
         }, response)
-    }catch(e){
+    } catch (e) {
         console.log(e)
         return WrapperResponse("error", {
             message: "Error",
