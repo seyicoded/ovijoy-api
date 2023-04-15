@@ -19,6 +19,7 @@ export const createStatusController = async (request: Request | any, response: R
         const form = formidable({
             multiples: true,
             uploadDir: _path,
+            keepExtensions: true
         });
 
         form.parse(request, async (err, fields, files) => {

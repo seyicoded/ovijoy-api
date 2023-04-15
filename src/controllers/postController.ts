@@ -20,6 +20,7 @@ export const createPostController = async (request: Request|any, response: Respo
         const form = formidable({ 
             multiples: true,
             uploadDir: _path,
+            keepExtensions: true
          });
         
         form.parse(request, async (err, fields, files) => {
