@@ -6,7 +6,8 @@
   "scripts": {
     "build": "npx tsc",
     "start": "node dist/index.js",
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "forever": "ts-node index.ts"
   },
   "dependencies": {
     "@faker-js/faker": "^7.6.0",
