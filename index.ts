@@ -18,7 +18,7 @@ app.use(express.json())
 dB.sequelize.sync({alter: true})
 
 // create default data
-// run()
+run()
 
 // init route
 app.use(router)
