@@ -20,8 +20,17 @@ export const createPostController = async (request: Request|any, response: Respo
         const form = formidable({ 
             multiples: true,
             uploadDir: _path,
-            keepExtensions: true
+            keepExtensions: true,
+            // filename: (name, ext, path, form)=>{
+
+            //     console.warn(`${name}.${ext}`)
+            //     return `${name}.${ext}`;
+            // }
          });
+
+        // form.on("file", (name, file)=>{
+        //     console.warn(name, file)
+        // })
         
         form.parse(request, async (err, fields, files) => {
             if (err) {
@@ -81,9 +90,15 @@ export const editPostController = async (request: Request|any, response: Respons
         const form = formidable({ 
             multiples: true,
             uploadDir: _path,
-         });
+            keepExtensions: true,
+            // filename: (name, ext, path, form)=>{
 
-         form.parse(request, async (err, fields, files) => {
+            //     console.warn(`${name}.${ext}`)
+            //     return `${name}.${ext}`;
+            // }
+        });
+
+        form.parse(request, async (err, fields, files) => {
             if (err) {
                 return WrapperResponse("error", {
                     message: "Error",

@@ -81,6 +81,7 @@ export const editGiveawayController = async (request: Request|any, response: Res
         const form = formidable({ 
             multiples: true,
             uploadDir: _path,
+            keepExtensions: true
          });
 
          form.parse(request, async (err, fields, files) => {
