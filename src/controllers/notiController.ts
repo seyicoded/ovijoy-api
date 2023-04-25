@@ -10,11 +10,12 @@ export const getNotification = async (request: Request|any, response: Response)=
             where: {
                 userId: user.id
             },
-            include: [
-                {
-                    model: db.users
-                }
-            ]
+            // include: [
+            //     {
+            //         model: db.users
+            //     }
+            // ]
+            include: { all: true }
         })
 
         // update all noti to read

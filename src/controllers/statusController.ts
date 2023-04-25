@@ -231,7 +231,15 @@ export const getStatusController = async (request: Request | any, response: Resp
                         },
                         {
                             model: db.comments,
-                            as: 'commentHost'
+                            as: 'commentHost',
+                            include: [
+                                {
+                                    model: db.users
+                                },
+                                {
+                                    model: db.likes
+                                }
+                            ]
                         }
                     ]
                 }
