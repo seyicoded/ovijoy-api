@@ -7,6 +7,7 @@ import fs from 'fs'
 import path from 'path'
 import { POST_STATUS } from "../config/constants/enum/others";
 import {Op} from 'sequelize'
+import { updatePostViewCountController } from "./viewController";
 // import formidable from 'formidable'
 const formidable = require('formidable');
 
@@ -204,7 +205,13 @@ export const deletePostController = async (request: Request|any, response: Respo
 
 export const getPostController = async (request: Request|any, response: Response)=>{
     try{
-
+        setTimeout(()=>{
+            try{
+                (async()=>{
+                    await updatePostViewCountController()
+                })()
+            }catch(e){}
+        }, 10)
         const user = request.user;
         const allPost = await db.post.findAll({
             where: {

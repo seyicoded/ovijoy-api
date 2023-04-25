@@ -24,6 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     hashtags: DataTypes.STRING,
     country: DataTypes.STRING,
     status: DataTypes.INTEGER,
+    views: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'giveaway',

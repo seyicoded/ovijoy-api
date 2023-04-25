@@ -6,6 +6,7 @@ import { WrapperResponse } from "../helper/wrapResponse";
 import fs from 'fs'
 import path from 'path'
 import { POST_STATUS, STATUS_STATUS } from "../config/constants/enum/others";
+import { updateStatusViewCountController } from "./viewController";
 // import formidable from 'formidable'
 const formidable = require('formidable');
 
@@ -196,7 +197,13 @@ export const deleteStatusController = async (request: Request | any, response: R
 
 export const getStatusController = async (request: Request | any, response: Response) => {
     try {
-
+        setTimeout(()=>{
+            try{
+                (async()=>{
+                    await updateStatusViewCountController()
+                })()
+            }catch(e){}
+        }, 10)
         const user = request.user;
         const allPostStatus = await db.status.findAll({
             where: {

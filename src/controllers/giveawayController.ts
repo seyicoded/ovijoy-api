@@ -7,6 +7,7 @@ import fs from 'fs'
 import path from 'path'
 import { POST_STATUS } from "../config/constants/enum/others";
 import {Op} from 'sequelize'
+import { updateGiveawayViewCountController } from "./viewController";
 // import formidable from 'formidable'
 const formidable = require('formidable');
 
@@ -190,7 +191,13 @@ export const deleteGiveawayController = async (request: Request|any, response: R
 
 export const getGiveawayController = async (request: Request|any, response: Response)=>{
     try{
-
+        setTimeout(()=>{
+            try{
+                (async()=>{
+                    await updateGiveawayViewCountController()
+                })()
+            }catch(e){}
+        }, 10)
         const user = request.user;
         const allPost = await db.giveaway.findAll({
             where: {
