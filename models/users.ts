@@ -18,6 +18,8 @@ module.exports = (sequelize, DataTypes) => {
       (models.users).hasMany(models.likes);
       (models.users).hasMany(models.giveaway);
       (models.users).hasMany(models.notification);
+      (models.users).hasMany(models.collection);
+      (models.users).hasMany(models.bookmark);
       (models.users).hasOne(models.notification, {
         foreignKey: 'actionByUserId'
       })

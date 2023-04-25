@@ -11,17 +11,26 @@ const port = process.env.PORT || 3000;
 
 app.use(urlencoded({
     extended: false
-}))
-app.use(express.json())
+}));
 
-// init database
-dB.sequelize.sync({alter: true})
+app.use(express.json());
 
-// create default data
-run()
+// // init database
+// dB.sequelize.sync({alter: true});
+
+// // create default data
+// run();
+
+(async()=>{
+  // init database
+  await dB.sequelize.sync({alter: true});
+
+  // create default data
+  run();
+})();
 
 // init route
-app.use(router)
+app.use(router);
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 

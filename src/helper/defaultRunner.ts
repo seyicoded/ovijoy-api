@@ -3,12 +3,14 @@ import bcryptjs from 'bcryptjs'
 import { USER_ROLE } from '../config/constants/enum/auth';
 import { Op } from 'sequelize';
 import { CATEGORY_STATUS } from '../config/constants/enum/category';
+import { POST_STATUS } from '../config/constants/enum/others';
 
 export const run = ()=>{
     (async()=>{
         await createDefaultAdmin()
         await createDefaultStaff()
         await createCategories()
+        await createDefaultCollection()
     })()
 }
 
@@ -99,4 +101,18 @@ const createCategories = async ()=>{
         })
         
     }
+}
+
+const createDefaultCollection = async()=>{
+    const coll = await db.collection.findAll();
+
+    if(coll.length !== 0){
+        return null;
+    }
+
+    await db.collection.create({
+        title: 'General',
+        userId: 1,
+        status: POST_STATUS.ACTIVE
+    });
 }

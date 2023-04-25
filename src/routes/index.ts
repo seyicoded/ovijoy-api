@@ -10,6 +10,7 @@ import { createStatusController, deleteStatusController, editStatusController, g
 import { authAdminMiddleWare, authMiddleWare } from '../middleware/auth';
 import { createGiveawayController, deleteGiveawayController, editGiveawayController, getGiveawayController } from '../controllers/giveawayController';
 import { getNotification } from '../controllers/notiController';
+import { addPostToBookmark, createCollection, fetchCollections, moveBookmarkToCollection } from '../controllers/bookmarkController';
 
 const router = express.Router()
 
@@ -64,6 +65,12 @@ router.post("/comment/:type/:id", authMiddleWare, toggleCommentController)
 
 // noti
 router.get("/notifications", authMiddleWare, getNotification) 
+
+// bookmark
+router.get("/bookmark/collections", authMiddleWare, fetchCollections) 
+router.post("/bookmark/collections", authMiddleWare, createCollection) 
+router.post("/bookmark/add", authMiddleWare, addPostToBookmark) 
+router.post("/bookmark/move", authMiddleWare, moveBookmarkToCollection) 
 
 
 // generic
