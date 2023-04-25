@@ -17,6 +17,17 @@ export const getNotification = async (request: Request|any, response: Response)=
             ]
         })
 
+        // update all noti to read
+
+        await db.notification.update({
+            status: 'READ'
+        }, {
+            where: {
+                userId: user.id,
+                status: 'UNREAD'
+            }
+        })
+
         return WrapperResponse("success", {
             message: "Fetched Successfully",
             status: "success",
