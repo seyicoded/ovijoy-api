@@ -6,7 +6,7 @@ export const getNotification = async (request: Request|any, response: Response)=
     try{
         const user = request.user;
 
-        const all = db.notification.findAll({
+        const all = await db.notification.findAll({
             where: {
                 userId: user.id
             },
