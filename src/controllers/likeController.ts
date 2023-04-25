@@ -6,6 +6,7 @@ import { WrapperResponse } from "../helper/wrapResponse";
 import fs from 'fs'
 import path from 'path'
 import { LIKE_STATUS, POST_STATUS, STATUS_STATUS } from "../config/constants/enum/others";
+import { addNotification } from "./notiController";
 
 export const toggleLikeController = async (request: Request|any, response: Response)=>{
 
@@ -90,6 +91,9 @@ export const toggleLikeController = async (request: Request|any, response: Respo
                     commentId: value.id,
                     active: LIKE_STATUS.ACTIVE
                 })
+
+                // it's only here we would add the noti
+            await addNotification(value.id, user.id, 'liked')
             }else{
                 // destroy
                 await db.likes.destroy({

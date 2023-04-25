@@ -9,6 +9,7 @@ import { getProfileController, updateProfileController, updateProfileImageContro
 import { createStatusController, deleteStatusController, editStatusController, getStatusController } from '../controllers/statusController';
 import { authAdminMiddleWare, authMiddleWare } from '../middleware/auth';
 import { createGiveawayController, deleteGiveawayController, editGiveawayController, getGiveawayController } from '../controllers/giveawayController';
+import { getNotification } from '../controllers/notiController';
 
 const router = express.Router()
 
@@ -60,6 +61,9 @@ router.post("/like/:type/:id", authMiddleWare, toggleLikeController)
 
 // **** comment **** 
 router.post("/comment/:type/:id", authMiddleWare, toggleCommentController) 
+
+// noti
+router.get("/notifications", authMiddleWare, getNotification) 
 
 
 // generic
