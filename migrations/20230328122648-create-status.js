@@ -10,7 +10,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       caption: {
-        type: Sequelize.STRING
+        type: Sequelize.BLOB
       },
       media: {
         type: Sequelize.STRING
@@ -19,7 +19,7 @@ module.exports = {
         type: Sequelize.STRING
       },
       hashtags: {
-        type: Sequelize.STRING
+        type: Sequelize.BLOB
       },
       category: {
         type: Sequelize.STRING

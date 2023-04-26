@@ -10,7 +10,7 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       caption: {
-        type: Sequelize.STRING,
+        type: Sequelize.BLOB(700),
         allowNull: true,
       },
       media: {
@@ -22,7 +22,7 @@ module.exports = {
         allowNull: true,
       },
       hashtags: {
-        type: Sequelize.STRING,
+        type: Sequelize.BLOB,
         allowNull: true,
       },
       category: {
