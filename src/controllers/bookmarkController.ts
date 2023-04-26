@@ -58,8 +58,10 @@ export const addPostToBookmark = async (request: Request|any, response: Response
 
         // check if bookmark exist
         const exist = await db.bookmark.findOne({
-            postId: value.postId,
-            userId: user.id,
+            where: {
+                postId: value.postId,
+                userId: user.id,
+            }
         })
         if(!exist){
             await db.bookmark.create({
