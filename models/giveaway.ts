@@ -18,10 +18,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   giveaway.init({
-    caption: DataTypes.BLOB,
+    caption: DataTypes.TEXT,
     media: DataTypes.STRING,
     mediaType: DataTypes.STRING,
-    hashtags: DataTypes.BLOB,
+    hashtags: DataTypes.TEXT,
     country: DataTypes.STRING,
     status: DataTypes.INTEGER,
     views: DataTypes.INTEGER,
