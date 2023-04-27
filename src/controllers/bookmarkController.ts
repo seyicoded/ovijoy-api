@@ -134,69 +134,86 @@ export const fetchCollections = async (request: Request|any, response: Response)
     try{
         const user = request.user;
 
-        const all = await db.collection.findAll({
+        let temp11 = [];
+
+        const all = (await db.collection.findAll({
             where: {
-                userId: {
-                    [Op.or]: [1, user.id]
-                },
-                // [Op.or]: [
-                //     {userId: 1},
-                //     {userId: user.id}
-                // ]
+                // userId: {
+                //     [Op.or]: [1, user.id]
+                // },
+                [Op.or]: [
+                    {userId: 1},
+                    {userId: user.id}
+                ]
             },
-            include: [
-                {
-                    model: db.bookmark,
-                    where: {
-                        userId: user.id
-                    },
-                    include: [
-                        {
-                            model: db.post,
-                            include: [
-                                {
-                                    model: db.users,
-                                },
-                                {
-                                    model: db.category,
-                                },
-                                {
-                                    model: db.likes,
-                                },
-                                {
-                                    model: db.comments,
-                                    include: [
-                                        {
-                                            model: db.likes
-                                        },
-                                        {
-                                            model: db.users
-                                        },
-                                        {
-                                            model: db.comments,
-                                            as: 'commentHost',
-                                            include: [
-                                                {
-                                                    model: db.users
-                                                },
-                                                {
-                                                    model: db.likes
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        })
+        }));
+
+        console.warn(all)
+
+        for (let i = 0; i < all.length; i++) {
+            const _item = all[i];
+
+            const temp = await db.bookmark.findAll({
+                where: {
+                    userId: user.id,
+                    collectionId: _item.id
+                },
+                include: [
+                    {
+                        model: db.post,
+                        include: [
+                            {
+                                model: db.users,
+                            },
+                            {
+                                model: db.category,
+                            },
+                            {
+                                model: db.likes,
+                            },
+                            {
+                                model: db.comments,
+                                include: [
+                                    {
+                                        model: db.likes
+                                    },
+                                    {
+                                        model: db.users
+                                    },
+                                    {
+                                        model: db.comments,
+                                        as: 'commentHost',
+                                        include: [
+                                            {
+                                                model: db.users
+                                            },
+                                            {
+                                                model: db.likes
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]   
+            })
+            // all[i] = {
+            //     bookmark: temp,
+            //     ...all[i]
+            // };
+
+            temp11.push({
+                bookmarks: temp,
+                ...all[i].get()
+            })
+        }
+
 
         return WrapperResponse("success", {
             message: "Fetch Successfully",
             status: "success",
-            payload: all
+            payload: temp11
         }, response)
     }catch(e){
         console.log(e)
