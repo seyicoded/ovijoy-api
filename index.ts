@@ -24,7 +24,7 @@ run();
 
 (async()=>{
   // init database
-  await dB.sequelize.sync({alter: true});
+  await dB.sequelize.sync({force: true});
 
   // create default data
   run();
