@@ -30,6 +30,7 @@ const createUserScheme = {
     phone: Joi.string().required().label("phone"),
     dob: Joi.string().required().label("dob"),
     gender: Joi.string().required().label("gender"),
+    country: Joi.string().optional().label("country"),
 }
 
 type loginUser = {
@@ -207,6 +208,7 @@ export const registerController = async (request: Request, response: Response)=>
         phone: value.phone,
         dob: value.dob,
         gender: value.gender,
+        country: value.country,
         role: USER_ROLE.USER
     })
 

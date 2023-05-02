@@ -40,6 +40,7 @@ const createDefaultAdmin = async()=>{
         phone: '2348171498476',
         dob: '2022-09-27 18:00:00.000',
         gender: 'male',
+        country: 'Nigeria',
         role: USER_ROLE.ADMIN
     })
 }
@@ -70,6 +71,7 @@ const createDefaultStaff = async()=>{
         phone: '2348171498476',
         dob: '2022-09-27 18:00:00.000',
         gender: 'female',
+        country: 'Nigeria',
         role: USER_ROLE.STAFF
     })
 }
@@ -84,7 +86,6 @@ const createCategories = async ()=>{
     const __cat = [
         "Be Inspired",
         "Travels",
-        "Hilarious",
         "International News",
         "Hilarious",
         "Self Development",

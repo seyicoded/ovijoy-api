@@ -103,6 +103,7 @@ export const moveBookmarkToCollection = async (request: Request|any, response: R
         }).validate(request.body)
     
         if(error){
+            console.warn(error)
             return WrapperResponse("error", {
                 message: error.message,
                 status: "failed"
@@ -122,7 +123,7 @@ export const moveBookmarkToCollection = async (request: Request|any, response: R
             status: "success"
         }, response)
     }catch(e){
-        console.log(e)
+        console.warn(e)
         return WrapperResponse("error", {
             message: "Error",
             status: "failed"

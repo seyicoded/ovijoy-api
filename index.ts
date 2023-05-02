@@ -5,6 +5,7 @@ import winston from 'winston'
 import 'dotenv/config'
 import { run } from './src/helper/defaultRunner';
 import path from 'path';
+import morgan from 'morgan';
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
@@ -19,7 +20,7 @@ app.use(express.json());
 // dB.sequelize.sync({alter: true});
 
 // // create default data
-// run();
+run();
 
 (async()=>{
   // init database
@@ -31,6 +32,8 @@ app.use(express.json());
 
 // init route
 app.use(router);
+
+app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 

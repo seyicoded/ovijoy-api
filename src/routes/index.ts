@@ -11,6 +11,7 @@ import { authAdminMiddleWare, authMiddleWare } from '../middleware/auth';
 import { createGiveawayController, deleteGiveawayController, editGiveawayController, getGiveawayController } from '../controllers/giveawayController';
 import { getNotification } from '../controllers/notiController';
 import { addPostToBookmark, createCollection, fetchCollections, moveBookmarkToCollection } from '../controllers/bookmarkController';
+import { updateViewController } from '../controllers/viewController';
 
 const router = express.Router()
 
@@ -62,6 +63,9 @@ router.post("/like/:type/:id", authMiddleWare, toggleLikeController)
 
 // **** comment **** 
 router.post("/comment/:type/:id", authMiddleWare, toggleCommentController) 
+
+// **** view **** 
+router.post("/view/:type/:id", authMiddleWare, updateViewController) 
 
 // noti
 router.get("/notifications", authMiddleWare, getNotification) 

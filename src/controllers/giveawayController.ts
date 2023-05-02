@@ -202,6 +202,7 @@ export const getGiveawayController = async (request: Request|any, response: Resp
         const allPost = await db.giveaway.findAll({
             where: {
                 status: POST_STATUS.ACTIVE,
+                country: user.country
             },
             // include: { all: true, nested: true }
             include: [

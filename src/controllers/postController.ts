@@ -216,6 +216,7 @@ export const getPostController = async (request: Request|any, response: Response
         const allPost = await db.post.findAll({
             where: {
                 status: POST_STATUS.ACTIVE,
+                country: user.country
             },
             // include: { all: true, nested: true }
             include: [
