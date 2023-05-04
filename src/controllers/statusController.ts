@@ -7,6 +7,7 @@ import fs from 'fs'
 import path from 'path'
 import { POST_STATUS, STATUS_STATUS } from "../config/constants/enum/others";
 import { updateStatusViewCountController } from "./viewController";
+import { USER_ROLE } from "../config/constants/enum/auth";
 // import formidable from 'formidable'
 const formidable = require('formidable');
 
@@ -59,7 +60,7 @@ export const createStatusController = async (request: Request | any, response: R
                 mediaType: fileType,
                 hashtags: value.hashtags,
                 country: value.country,
-                status: POST_STATUS.ACTIVE,
+                status: POST_STATUS.PENDING,
                 userId: __user.id,
                 categoryId: value.category_id
             })
@@ -204,12 +205,22 @@ export const getStatusController = async (request: Request | any, response: Resp
                 })()
             }catch(e){}
         }, 10)
+
+        const {pending: isFetchPending = null} = request.params;
+
+        // console.log(isFetchPending)
+        
         const user = request.user;
+
+        const _where = (user.role === USER_ROLE.ADMIN) ? {
+            status: (isFetchPending != null) ? STATUS_STATUS.PENDING : STATUS_STATUS.ACTIVE,
+        } : {
+            status: (isFetchPending != null) ? STATUS_STATUS.PENDING : STATUS_STATUS.ACTIVE,
+            country: user.country
+        };
+
         const allPostStatus = await db.status.findAll({
-            where: {
-                status: STATUS_STATUS.ACTIVE,
-                country: user.country
-            },
+            where: _where,
             // include: { all: true, nested: true }
             include: [
                 {
@@ -278,6 +289,44 @@ export const getStatusController = async (request: Request | any, response: Resp
             status: "success",
             payload: filteredStatus
         }, response)
+    } catch (e) {
+        console.log(e)
+        return WrapperResponse("error", {
+            message: "Error",
+            status: "failed"
+        }, response)
+    }
+}
+
+export const approveStatusController = async (request: Request | any, response: Response) => {
+    try{
+        const { status_ids = [] } = request.body;
+
+        if(status_ids.length == 0){
+            return WrapperResponse("error", {
+                message: "Error, array request",
+                status: "failed"
+            }, response)
+        }
+
+        for (let i = 0; i < status_ids.length; i++) {
+            const _id = status_ids[i];
+
+            await db.status.update({
+                status: STATUS_STATUS.ACTIVE
+            }, {
+                where: {
+                    id: _id
+                }
+            })
+            
+        }
+
+        return WrapperResponse("success", {
+            message: "Selection Approved",
+            status: "success"
+        }, response)
+
     } catch (e) {
         console.log(e)
         return WrapperResponse("error", {

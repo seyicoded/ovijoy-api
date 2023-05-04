@@ -1,12 +1,12 @@
 import express from 'express'
-import { loginController, registerController, requestPhoneOtpController, requestEmailOtpController, changePasswordController } from '../controllers/authController';
+import { loginController, registerController, requestPhoneOtpController, requestEmailOtpController, changePasswordController, validateEmailController } from '../controllers/authController';
 import { createCatCategory, deleteCatCategory, editCatCategory, getCatCategory } from '../controllers/catController';
 import { toggleCommentController } from '../controllers/commentController';
 import { alterInvitation, createGroup, inviteGroup, myCreatedGroup, viewInvitation } from '../controllers/groupController';
 import { toggleLikeController } from '../controllers/likeController';
 import { createPostController, deletePostController, editPostController, getPostController } from '../controllers/postController';
 import { getProfileController, updateProfileController, updateProfileImageController } from '../controllers/profileController';
-import { createStatusController, deleteStatusController, editStatusController, getStatusController } from '../controllers/statusController';
+import { approveStatusController, createStatusController, deleteStatusController, editStatusController, getStatusController } from '../controllers/statusController';
 import { authAdminMiddleWare, authMiddleWare } from '../middleware/auth';
 import { createGiveawayController, deleteGiveawayController, editGiveawayController, getGiveawayController } from '../controllers/giveawayController';
 import { getNotification } from '../controllers/notiController';
@@ -22,6 +22,7 @@ router.post("/otp/email", requestEmailOtpController);
 router.post("/otp/phone", requestPhoneOtpController);
 
 // **** auth
+router.get("/register/:email", validateEmailController)
 router.post("/register", registerController)
 router.post("/login", loginController)
 router.post("/change-password", changePasswordController)
@@ -45,8 +46,11 @@ router.delete("/post/:id", authAdminMiddleWare, deletePostController)
 // **** status **** 
 router.get("/status", authMiddleWare, getStatusController) 
 // admin only ****
+router.get("/status/:pending", authAdminMiddleWare, getStatusController) 
+
 router.post("/status", authAdminMiddleWare, createStatusController) 
 router.patch("/status", authAdminMiddleWare, editStatusController) 
+router.patch("/status/pending", authAdminMiddleWare, approveStatusController) 
 router.delete("/status/:id", authAdminMiddleWare, deleteStatusController) 
 
 // **** category **** 

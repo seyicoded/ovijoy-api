@@ -166,6 +166,44 @@ export const requestPhoneOtpController = async (request: Request, response: Resp
     }, response)
 }
 
+export const validateEmailController = async (request: Request, response: Response)=>{
+    try{
+        const { email } = request.params;
+        
+        // check if user exist
+        const _user = await db.users.findOne({
+            where: {
+                [Op.or]: [
+                    { email: email }
+                ]
+            }
+        });
+
+        let exist = false;
+
+        if(_user){
+            exist = true;
+        }
+
+
+        return WrapperResponse("success", {
+            message: "Fetched entry",
+            status: "success",
+            payload: {
+                exist,
+                email
+            }
+        }, response)
+    }
+    catch(e){
+        console.log(e)
+        return WrapperResponse("error", {
+            message: "Token is Invalid",
+            status: "failed"
+        }, response)
+    }
+}
+
 export const registerController = async (request: Request, response: Response)=>{
     const data: createUser = request.body;
     

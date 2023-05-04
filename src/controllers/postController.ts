@@ -8,6 +8,7 @@ import path from 'path'
 import { POST_STATUS } from "../config/constants/enum/others";
 import {Op} from 'sequelize'
 import { updatePostViewCountController } from "./viewController";
+import { USER_ROLE } from "../config/constants/enum/auth";
 // import formidable from 'formidable'
 const formidable = require('formidable');
 
@@ -213,11 +214,16 @@ export const getPostController = async (request: Request|any, response: Response
             }catch(e){}
         }, 10)
         const user = request.user;
+
+        const _where = (user.role === USER_ROLE.ADMIN) ? {
+            status: POST_STATUS.ACTIVE,
+        } : {
+            status: POST_STATUS.ACTIVE,
+            country: user.country
+        };
+
         const allPost = await db.post.findAll({
-            where: {
-                status: POST_STATUS.ACTIVE,
-                country: user.country
-            },
+            where: _where,
             // include: { all: true, nested: true }
             include: [
                 {
