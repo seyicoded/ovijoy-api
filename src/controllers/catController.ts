@@ -69,12 +69,28 @@ export const deleteCatCategory = async (request: Request|any, response: Response
                 status: "failed"
             }, response)
         }
-        
-        await db.category.destroy({
+
+        const _cat = await db.category.findOne({
             where: {
                 id: value.id
             }
-        });
+        })
+
+        if(!_cat){
+            return WrapperResponse("error", {
+                message: 'category not found',
+                status: "failed"
+            }, response)
+        }
+
+        _cat.status = CATEGORY_STATUS.ARCHIVE;
+        await _cat.save();
+        
+        // await db.category.destroy({
+        //     where: {
+        //         id: value.id
+        //     }
+        // });
     
         return WrapperResponse("success", {
             message: "Deleted Successfully",
