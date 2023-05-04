@@ -34,7 +34,7 @@ export const createGiveawayController = async (request: Request|any, response: R
               return;
             }
 
-            const {newFilename, mimetype: fileType} = files.media;
+            const {newFilename, mimetype: fileType} = files?.media || {};
 
             const {error, value} = Joi.object({
                 caption: Joi.string().optional().label("caption"),
@@ -54,7 +54,7 @@ export const createGiveawayController = async (request: Request|any, response: R
             const __user = (request.user);
             const __post = await db.giveaway.create({
                 caption: value.caption,
-                media: `uploads/giveaways/${newFilename}`,
+                media: (newFilename == undefined) ? null : `uploads/giveaways/${newFilename}`,
                 mediaType: fileType,
                 hashtags: value.hashtags,
                 country: value.country,
