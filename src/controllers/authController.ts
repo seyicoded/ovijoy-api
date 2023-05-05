@@ -171,24 +171,41 @@ export const validateEmailController = async (request: Request, response: Respon
         const { email, username } = request.params;
         
         // check if user exist
-        const _user = await db.users.findOne({
+        let _user = await db.users.findOne({
             where: {
                 [Op.or]: [
-                    { email: email },
-                    { username: username }
+                    { email: email }
                 ]
             }
         });
 
         let exist = false;
+        let message = 'All Good';
 
         if(_user){
+            message = "Email already exist";
+            exist = true;
+        }
+
+        _user = await db.users.findOne({
+            where: {
+                [Op.or]: [
+                    { username: username }
+                ]
+            }
+        });
+
+        exist = false;
+        message = '';
+
+        if(_user){
+            message = "Username already exist";
             exist = true;
         }
 
 
         return WrapperResponse("success", {
-            message: "Fetched entry",
+            message,
             status: "success",
             payload: {
                 exist,
