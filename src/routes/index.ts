@@ -22,7 +22,7 @@ router.post("/otp/email", requestEmailOtpController);
 router.post("/otp/phone", requestPhoneOtpController);
 
 // **** auth
-router.get("/register/:email", validateEmailController)
+router.get("/register/:email/:username", validateEmailController)
 router.post("/register", registerController)
 router.post("/login", loginController)
 router.post("/change-password", changePasswordController)
