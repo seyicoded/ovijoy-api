@@ -168,13 +168,14 @@ export const requestPhoneOtpController = async (request: Request, response: Resp
 
 export const validateEmailController = async (request: Request, response: Response)=>{
     try{
-        const { email } = request.params;
+        const { email, username } = request.params;
         
         // check if user exist
         const _user = await db.users.findOne({
             where: {
                 [Op.or]: [
-                    { email: email }
+                    { email: email },
+                    { username: username }
                 ]
             }
         });
