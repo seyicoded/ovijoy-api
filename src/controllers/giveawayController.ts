@@ -70,9 +70,11 @@ export const createGiveawayController = async (request: Request|any, response: R
         });
         
     }catch(e){
+        console.log(e)
         return WrapperResponse("error", {
             message: "Error",
-            status: "failed"
+            status: "failed",
+            payload: e
         }, response)
     }
 }
