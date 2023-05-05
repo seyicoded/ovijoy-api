@@ -195,8 +195,6 @@ export const validateEmailController = async (request: Request, response: Respon
             }
         });
 
-        exist = false;
-        message = '';
 
         if(_user){
             message = "Username already exist";
