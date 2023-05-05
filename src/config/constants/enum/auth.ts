@@ -4,6 +4,7 @@ export const USER_STATUS = {
     ACTIVE: 1,
     INACTIVE: 2,
     BLOCKED: 3,
+    DELETED: 4,
 }
 
 export const USER_ROLE = {

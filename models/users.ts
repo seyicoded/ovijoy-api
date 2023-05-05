@@ -22,7 +22,8 @@ module.exports = (sequelize, DataTypes) => {
       (models.users).hasMany(models.bookmark);
       (models.users).hasOne(models.notification, {
         foreignKey: 'actionByUserId'
-      })
+      });
+      (models.users).belongsTo(models.staffrole);
             
     }
   }

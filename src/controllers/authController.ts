@@ -9,7 +9,7 @@ import { sendMail } from '../generic/sendMail';
 import { generateOtpMailTemplate } from '../templates/mails/otp';
 import { generateSmsUseCase, sendSMS } from '../generic/termii';
 import {Op} from 'sequelize'
-import { USER_ROLE } from '../config/constants/enum/auth';
+import { USER_ROLE, USER_STATUS } from '../config/constants/enum/auth';
 import moment from 'moment'
 
 var jwt = require('jsonwebtoken');
@@ -263,7 +263,8 @@ export const registerController = async (request: Request, response: Response)=>
         dob: value.dob,
         gender: value.gender,
         country: value.country,
-        role: USER_ROLE.USER
+        role: USER_ROLE.USER,
+        status: USER_STATUS.ACTIVE
     })
 
 
@@ -310,12 +311,20 @@ export const loginController = async (request: Request, response: Response)=>{
                 { email: value.email },
                 { username: value.email },
             ]
-        }
+        },
+        include: [db.staffrole]
     });
 
     if(!user){
         return WrapperResponse("error", {
             message: "User doesn't exist",
+            status: "failed"
+        }, response)
+    }
+
+    if(user.status != USER_STATUS.ACTIVE){
+        return WrapperResponse("error", {
+            message: "User Not Active to Login",
             status: "failed"
         }, response)
     }

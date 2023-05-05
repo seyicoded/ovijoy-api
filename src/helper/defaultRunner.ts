@@ -1,17 +1,39 @@
 import db from '../../models';
 import bcryptjs from 'bcryptjs'
-import { USER_ROLE } from '../config/constants/enum/auth';
+import { USER_ROLE, USER_STATUS } from '../config/constants/enum/auth';
 import { Op } from 'sequelize';
 import { CATEGORY_STATUS } from '../config/constants/enum/category';
 import { POST_STATUS } from '../config/constants/enum/others';
+import { STAFF_ROLE_LIST } from '../config/constants/enum/staff';
 
 export const run = ()=>{
     (async()=>{
+        await createDefaultStaffRole()
         await createDefaultAdmin()
         await createDefaultStaff()
         await createCategories()
         await createDefaultCollection()
     })()
+}
+
+const createDefaultStaffRole = async ()=>{
+    const _staffrole = await db.staffrole.findAll();
+
+    if(_staffrole.length !== 0){
+        return null;
+    }
+
+    let _list = STAFF_ROLE_LIST;
+
+    for (let i = 0; i < _list.length; i++) {
+        const element = _list[i];
+        
+        await db.staffrole.create({
+            role: element.role,
+            status: element.status
+        });
+
+    }
 }
 
 const createDefaultAdmin = async()=>{
@@ -41,7 +63,9 @@ const createDefaultAdmin = async()=>{
         dob: '2022-09-27 18:00:00.000',
         gender: 'male',
         country: 'Nigeria',
-        role: USER_ROLE.ADMIN
+        role: USER_ROLE.ADMIN,
+        staffroleId: 1,
+        status: USER_STATUS.ACTIVE
     })
 }
 
@@ -72,7 +96,9 @@ const createDefaultStaff = async()=>{
         dob: '2022-09-27 18:00:00.000',
         gender: 'female',
         country: 'Nigeria',
-        role: USER_ROLE.STAFF
+        role: USER_ROLE.STAFF,
+        staffroleId: 2,
+        status: USER_STATUS.ACTIVE
     })
 }
 

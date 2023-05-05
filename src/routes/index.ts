@@ -8,10 +8,12 @@ import { createPostController, deletePostController, editPostController, getPost
 import { getProfileController, updateProfileController, updateProfileImageController } from '../controllers/profileController';
 import { approveStatusController, createStatusController, deleteStatusController, editStatusController, getStatusController } from '../controllers/statusController';
 import { authAdminMiddleWare, authMiddleWare } from '../middleware/auth';
-import { createGiveawayController, deleteGiveawayController, editGiveawayController, getGiveawayController } from '../controllers/giveawayController';
+import { createGiveawayController, createGiveawayWinnerController, deleteGiveawayController, editGiveawayController, getGiveawayController, getGiveawayWinnerController } from '../controllers/giveawayController';
 import { getNotification } from '../controllers/notiController';
 import { addPostToBookmark, createCollection, fetchCollections, moveBookmarkToCollection } from '../controllers/bookmarkController';
 import { updateViewController } from '../controllers/viewController';
+import { createStaffController, deleteStaffController, fetchStaffRoleController, getStaffController, toggleStaffStatusController } from '../controllers/staffController';
+import { getUsersController } from '../controllers/userController';
 
 const router = express.Router()
 
@@ -88,7 +90,22 @@ router.get("/profile", authMiddleWare, getProfileController)
 router.patch("/profile", authMiddleWare, updateProfileController) 
 
 
+// staff management...
+router.get("/roles", authMiddleWare, fetchStaffRoleController) 
+router.get("/staff", authAdminMiddleWare, getStaffController) 
+router.patch("/staff/toggle/:id", authAdminMiddleWare, toggleStaffStatusController) 
+router.delete("/staff/:id", authAdminMiddleWare, deleteStaffController) 
+router.post("/staff", authAdminMiddleWare, createStaffController) 
 
+
+// user management
+router.get("/users", authAdminMiddleWare, getUsersController) 
+router.patch("/users/toggle/:id", authAdminMiddleWare, toggleStaffStatusController) 
+router.delete("/users/:id", authAdminMiddleWare, deleteStaffController) 
+
+// giveaway winner
+router.post("/giveaway/winner", authAdminMiddleWare, createGiveawayWinnerController) 
+router.get("/giveaway/winner", authAdminMiddleWare, getGiveawayWinnerController) 
 
 
 // auth route::old

@@ -20,20 +20,21 @@ app.use(express.json());
 // dB.sequelize.sync({alter: true});
 
 // // create default data
-run();
 
 (async()=>{
   // init database
   await dB.sequelize.sync({alter: true});
-
+  console.log("[database]: Done Syncing")
   // create default data
   run();
 })();
 
+// app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
+app.use(morgan('dev'));
+
 // init route
 app.use(router);
 
-app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
 
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')))
 

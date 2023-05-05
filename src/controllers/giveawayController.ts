@@ -288,3 +288,48 @@ export const getGiveawayController = async (request: Request|any, response: Resp
         }, response)
     }
 }
+
+export const createGiveawayWinnerController = async (request: Request|any, response: Response)=>{
+    try {
+        const {userId} = request.body;
+
+        await db.giveawaywinner.create({
+            userId,
+            status: 1
+        })
+
+        return WrapperResponse("success", {
+            message: "Created Successfully",
+            status: "success",
+        }, response)
+    } catch (e) {
+        console.log(e)
+        return WrapperResponse("error", {
+            message: "Error",
+            status: "failed",
+            payload: e
+        }, response)
+    }
+}
+
+export const getGiveawayWinnerController = async (request: Request|any, response: Response)=>{
+    try {
+        
+        const data = await db.giveawaywinner.findAll({
+            include: [db.users]
+        })
+
+        return WrapperResponse("success", {
+            message: "Fetched Successfully",
+            status: "success",
+            payload: data
+        }, response)
+    } catch (e) {
+        console.log(e)
+        return WrapperResponse("error", {
+            message: "Error",
+            status: "failed",
+            payload: e
+        }, response)
+    }
+}
