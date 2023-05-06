@@ -76,6 +76,15 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: true,
       },
+      refer_by_username: {
+        type: Sequelize.STRING,
+        allowNull: true,
+      },
+      can_access_giveaway: {
+        type: Sequelize.BOOLEAN,
+        allowNull: false,
+        defaultValue: false
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

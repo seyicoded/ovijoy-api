@@ -2,6 +2,8 @@ import { Request, Response } from "express";
 import Joi from "joi";
 import db from "../../models";
 import { WrapperResponse } from "../helper/wrapResponse";
+import { USER_ROLE } from "../config/constants/enum/auth";
+import { upgradeUserToAccessGiveaway } from "../generic/functions";
 // import formidable from 'formidable'
 const formidable = require('formidable');
 
@@ -56,12 +58,23 @@ export const updateProfileImageController = async (request: Request|any, respons
 
 export const getProfileController = async (request: Request|any, response: Response)=>{
     try{
-        const _user = await db.users.findOne(
+        let _user = await db.users.findOne(
         {
             where: {
                 id: request.user.id
             }
         })
+
+        if(_user.role == USER_ROLE.USER){
+            await upgradeUserToAccessGiveaway(_user)
+
+            _user = await db.users.findOne(
+            {
+                where: {
+                    id: request.user.id
+                }
+            })
+        }
 
         return WrapperResponse("success", {
             message: "Fetched Successfully",

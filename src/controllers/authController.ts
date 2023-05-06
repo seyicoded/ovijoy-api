@@ -21,6 +21,7 @@ type createUser = {
     dob: string;
     gender: string;
     password: string;
+    refer_by_username?: string;
 }
 
 const createUserScheme = {
@@ -31,6 +32,7 @@ const createUserScheme = {
     dob: Joi.string().required().label("dob"),
     gender: Joi.string().required().label("gender"),
     country: Joi.string().optional().label("country"),
+    refer_by_username: Joi.string().optional().label("refer_by_username"),
 }
 
 type loginUser = {
@@ -264,7 +266,8 @@ export const registerController = async (request: Request, response: Response)=>
         gender: value.gender,
         country: value.country,
         role: USER_ROLE.USER,
-        status: USER_STATUS.ACTIVE
+        status: USER_STATUS.ACTIVE,
+        refer_by_username: value?.refer_by_username || null
     })
 
 
