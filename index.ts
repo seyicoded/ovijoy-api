@@ -23,7 +23,7 @@ app.use(express.json());
 
 (async()=>{
   // init database
-  await dB.sequelize.sync({force: true});
+  await dB.sequelize.sync({alter: true});
   console.log("[database]: Done Syncing")
   // create default data
   run();
