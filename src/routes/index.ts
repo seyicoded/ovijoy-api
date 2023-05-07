@@ -14,6 +14,7 @@ import { addPostToBookmark, createCollection, fetchCollections, moveBookmarkToCo
 import { updateViewController } from '../controllers/viewController';
 import { createStaffController, deleteStaffController, fetchStaffRoleController, getStaffController, toggleStaffStatusController } from '../controllers/staffController';
 import { getUsersController } from '../controllers/userController';
+import { fetchAnalyticsController } from '../controllers/statController';
 
 const router = express.Router()
 
@@ -106,6 +107,9 @@ router.delete("/users/:id", authAdminMiddleWare, deleteStaffController)
 // giveaway winner
 router.post("/giveaway/winner", authAdminMiddleWare, createGiveawayWinnerController) 
 router.get("/giveaway/winner", authAdminMiddleWare, getGiveawayWinnerController) 
+
+// get analytics data
+router.get("/analytics", authAdminMiddleWare, fetchAnalyticsController) 
 
 
 // auth route::old
