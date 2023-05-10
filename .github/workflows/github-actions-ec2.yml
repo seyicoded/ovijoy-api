@@ -1,13 +1,16 @@
+name: Deploy to Amazon EC2
+
 on:
   push:
     branches: [ "main" ]
 
 jobs:
   deploy:
-    name: Deploy to EC2
+    name: Deploy
     runs-on: ubuntu-latest
+    environment: production
     steps:
-      - name: Checkout the files
+      - name: Checkout
         uses: actions/checkout@v2
 
       - name: Deploy to Server 1
@@ -17,6 +20,7 @@ jobs:
           REMOTE_HOST: ${{ secrets.HOST_DNS }}
           REMOTE_USER: ${{ secrets.USERNAME }}
           TARGET: ${{ secrets.TARGET_DIR }}
+          
   build:
     name: Build
     runs-on: ubuntu-latest
