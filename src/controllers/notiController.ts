@@ -1,15 +1,18 @@
 import { Request, Response } from "express";
 import { WrapperResponse } from "../helper/wrapResponse";
 import db from "../../models";
+import { USER_ROLE } from "../config/constants/enum/auth";
 
 export const getNotification = async (request: Request|any, response: Response)=>{
     try{
         const user = request.user;
 
+        let __where = (user.role === USER_ROLE.ADMIN) ? {} : {where: {
+            userId: user.id
+        }};
+
         const all = await db.notification.findAll({
-            where: {
-                userId: user.id
-            },
+            ...__where,
             // include: [
             //     {
             //         model: db.users
