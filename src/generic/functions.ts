@@ -39,3 +39,8 @@ export const upgradeUserToAccessGiveaway = async (user: any)=>{
 
     return null;
 }
+
+export const generateDummyEmail = async ()=>{
+    let number = await generateOtp(12);
+    return `${number}@deleted.com`
+}

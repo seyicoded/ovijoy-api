@@ -7,6 +7,7 @@ import bcryptjs from 'bcryptjs'
 import { USER_ROLE, USER_STATUS } from "../config/constants/enum/auth";
 import { sendMail } from "../generic/sendMail";
 import { generateNewStaffTemplate } from "../templates/mails/new-staff";
+import { generateDummyEmail } from "../generic/functions";
 
 const createStaffScheme = {
     email: Joi.string().required().label("Email"),
@@ -181,7 +182,11 @@ export const deleteStaffController = async (request: Request|any, response: Resp
             }, response)
         }
 
+        let __dummyEmail = await generateDummyEmail();
+
         _staff.status = USER_STATUS.DELETED;
+        _staff.email = __dummyEmail;
+        _staff.username = __dummyEmail;
         await _staff.save();
 
         return WrapperResponse("success", {
