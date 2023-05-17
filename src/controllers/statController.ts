@@ -20,6 +20,13 @@ export const fetchAnalyticsController = async (request: Request|any, response: R
             shares: [],
         }
 
+        const allData = {
+            users: [],
+            likes: [],
+            comments: [],
+            shares: [],
+        }
+
         
         // fetch :users: record per month
         const __users = await db.users.findAll({
@@ -38,7 +45,9 @@ export const fetchAnalyticsController = async (request: Request|any, response: R
             }
         }
         dataToReturn.users = ___users;
+        allData.users = __users;
         
+
         // fetch :likes: record per month
         const __likes = await db.likes.findAll()
 
@@ -51,6 +60,7 @@ export const fetchAnalyticsController = async (request: Request|any, response: R
             }
         }
         dataToReturn.likes = ___likes;
+        allData.likes = __likes;
 
         // fetch :comments: record per month
         const __comments = await db.comments.findAll()
@@ -64,6 +74,7 @@ export const fetchAnalyticsController = async (request: Request|any, response: R
             }
         }
         dataToReturn.comments = ___comments;
+        allData.comments = ___comments;
         
         
 
@@ -74,6 +85,13 @@ export const fetchAnalyticsController = async (request: Request|any, response: R
             shares: (dataToReturn.shares).length,
         }
 
+        const statAllData = {
+            users: (allData.users).length,
+            likes: (allData.likes).length,
+            comments: (allData.comments).length,
+            shares: (allData.shares).length,
+        }
+
         return WrapperResponse("success", {
             message: "Fetched Successfully",
             status: "success",
@@ -81,6 +99,10 @@ export const fetchAnalyticsController = async (request: Request|any, response: R
             payload: {
                 stat,
                 data: dataToReturn,
+                allData: {
+                    stat: statAllData,
+                    data: allData
+                }
             }
         }, response)
     } catch (e) {
