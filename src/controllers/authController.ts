@@ -32,7 +32,7 @@ const createUserScheme = {
     dob: Joi.string().required().label("dob"),
     gender: Joi.string().required().label("gender"),
     country: Joi.string().optional().label("country"),
-    refer_by_username: Joi.string().optional().label("refer_by_username"),
+    refer_by_username: Joi.any().optional().label("refer_by_username"),
 }
 
 type loginUser = {
