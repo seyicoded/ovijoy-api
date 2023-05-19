@@ -98,6 +98,7 @@ export const updateProfileController = async (request: Request|any, response: Re
             first_name: Joi.any().required().label("first name"),
             last_name: Joi.any().required().label("last name"),
             username: Joi.any().required().label("user name"),
+            about: Joi.any().optional().label("about me"),
         }).validate(request.body)
 
         if(error){

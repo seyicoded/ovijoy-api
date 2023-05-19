@@ -47,6 +47,7 @@ module.exports = (sequelize, DataTypes) => {
     country: DataTypes.STRING,
     refer_by_username: DataTypes.STRING,
     can_access_giveaway: DataTypes.BOOLEAN,
+    about: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'users',
