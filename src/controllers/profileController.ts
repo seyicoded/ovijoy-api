@@ -95,9 +95,9 @@ export const updateProfileController = async (request: Request|any, response: Re
         const user = request.user;
 
         const {error, value} = Joi.object({
-            first_name: Joi.any().required().label("first name"),
-            last_name: Joi.any().required().label("last name"),
-            username: Joi.any().required().label("user name"),
+            first_name: Joi.any().optional().label("first name"),
+            last_name: Joi.any().optional().label("last name"),
+            username: Joi.any().optional().label("user name"),
             about: Joi.any().optional().label("about me"),
         }).validate(request.body)
 
