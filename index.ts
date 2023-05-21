@@ -6,6 +6,7 @@ import 'dotenv/config'
 import { run } from './src/helper/defaultRunner';
 import path from 'path';
 import morgan from 'morgan';
+import { cronActionTrigger } from './crons/actions';
 
 const app: Express = express();
 const port = process.env.PORT || 3000;
@@ -27,6 +28,7 @@ app.use(express.json());
   console.log("[database]: Done Syncing")
   // create default data
   run();
+  cronActionTrigger()
 })();
 
 // app.use(morgan(':method :url :status :res[content-length] - :response-time ms'));
