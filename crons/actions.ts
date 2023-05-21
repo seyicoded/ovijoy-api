@@ -10,8 +10,8 @@ const cronAction = (command: string, func: Function)=>{
 
 export const cronActionTrigger = ()=>{
     cronAction('1 1 1 * * *', removeExpiredStatus);
-    cronAction('* * * * * *', removeExpiredGiveaway);
-    // cronAction('1 1 1 * * *', removeExpiredGiveaway);
+    // cronAction('* * * * * *', removeExpiredGiveaway);
+    cronAction('1 1 1 * * *', removeExpiredGiveaway);
 }
 
 const removeExpiredStatus = async ()=>{
