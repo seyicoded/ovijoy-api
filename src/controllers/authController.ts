@@ -170,7 +170,9 @@ export const requestPhoneOtpController = async (request: Request, response: Resp
 
 export const validateEmailController = async (request: Request, response: Response)=>{
     try{
-        const { email, username } = request.params;
+        const { email: _email, username: _username, phone } = request.params;
+        const email = _email.toLowerCase();
+        const username = _username.toLowerCase();
         
         // check if user exist
         let _user = await db.users.findOne({
@@ -200,6 +202,21 @@ export const validateEmailController = async (request: Request, response: Respon
 
         if(_user){
             message = "Username already exist";
+            exist = true;
+        }
+
+         _user = await db.users.findOne({
+            where: {
+                [Op.and]: [
+                    { phone: phone },
+                    {role: USER_ROLE.USER}
+                ],
+            }
+        });
+
+
+        if(_user){
+            message = "Phone Number already exist";
             exist = true;
         }
 
@@ -260,7 +277,7 @@ export const registerController = async (request: Request, response: Response)=>
         email: value.email,
         password: hashPassword,
         first_name: value.first_name,
-        username: value.username,
+        username: (value.username).toLowerCase(),
         phone: value.phone,
         dob: value.dob,
         gender: value.gender,

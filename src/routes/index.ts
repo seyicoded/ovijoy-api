@@ -13,7 +13,7 @@ import { getNotification } from '../controllers/notiController';
 import { addPostToBookmark, createCollection, fetchCollections, moveBookmarkToCollection } from '../controllers/bookmarkController';
 import { updateViewController } from '../controllers/viewController';
 import { createStaffController, deleteStaffController, fetchStaffRoleController, getStaffController, toggleStaffStatusController } from '../controllers/staffController';
-import { getUsersController } from '../controllers/userController';
+import { getUsersController, recordShareController } from '../controllers/userController';
 import { fetchAnalyticsController } from '../controllers/statController';
 
 const router = express.Router()
@@ -25,7 +25,7 @@ router.post("/otp/email", requestEmailOtpController);
 router.post("/otp/phone", requestPhoneOtpController);
 
 // **** auth
-router.get("/register/:email/:username", validateEmailController)
+router.get("/register/:email/:username/:phone", validateEmailController)
 router.post("/register", registerController)
 router.post("/login", loginController)
 router.post("/change-password", changePasswordController)
@@ -65,6 +65,9 @@ router.delete("/giveaway/:id", authAdminMiddleWare, deleteGiveawayController)
 
 
 // generic
+// **** share **** 
+router.post("/share-record", authMiddleWare, recordShareController) 
+
 // **** likes **** 
 router.post("/like/:type/:id", authMiddleWare, toggleLikeController) 
 

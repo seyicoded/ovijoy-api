@@ -74,7 +74,22 @@ export const fetchAnalyticsController = async (request: Request|any, response: R
             }
         }
         dataToReturn.comments = ___comments;
-        allData.comments = ___comments;
+        allData.comments = __comments;
+
+
+        // fetch :share: record per month
+        const __sharecount = await db.sharecount.findAll()
+
+        let ___sharecount = [];
+        for (let i = 0; i < __sharecount.length; i++) {
+            const item = __sharecount[i];
+            console.log(`${item.createdAt}`)
+            if( (`${item?.createdAt}` || "").includes(__date)){
+                ___sharecount.push(item)
+            }
+        }
+        dataToReturn.shares = ___sharecount;
+        allData.shares = __sharecount;
         
         
 
