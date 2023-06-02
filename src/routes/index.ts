@@ -25,7 +25,7 @@ router.post("/otp/email", requestEmailOtpController);
 router.post("/otp/phone", requestPhoneOtpController);
 
 // **** auth
-router.get("/register/:email/:username/:phone", validateEmailController)
+router.get("/register/:email/:username/:phone/:referral?", validateEmailController)
 router.post("/register", registerController)
 router.post("/login", loginController)
 router.post("/change-password", changePasswordController)

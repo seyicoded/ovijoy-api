@@ -170,7 +170,7 @@ export const requestPhoneOtpController = async (request: Request, response: Resp
 
 export const validateEmailController = async (request: Request, response: Response)=>{
     try{
-        const { email: _email, username: _username, phone } = request.params;
+        const { email: _email, username: _username, phone, referral } = request.params;
         const email = _email.toLowerCase();
         const username = _username.toLowerCase();
         
@@ -220,6 +220,19 @@ export const validateEmailController = async (request: Request, response: Respon
             exist = true;
         }
 
+        if( (referral || "").length > 0 ){
+            const r_user = await db.users.findOne({
+                where: {
+                    username: referral
+                }
+            })
+    
+            if(!r_user){
+                message = "Referral code not found";
+                exist = true;
+            }
+        }
+
 
         return WrapperResponse("success", {
             message,
@@ -246,10 +259,27 @@ export const registerController = async (request: Request, response: Response)=>
     const {error, value} = Joi.object(createUserScheme).validate(data)
 
     if(error){
+        console.log(error)
         return WrapperResponse("error", {
             message: error.message,
             status: "failed"
         }, response)
+    }
+
+    if((value?.refer_by_username || "").length > 0 ){
+        // validate if exist
+        const r_user = await db.users.findOne({
+            where: {
+                username: value.refer_by_username
+            }
+        })
+
+        if(!r_user){
+            return WrapperResponse("error", {
+                message: "Referral information not found",
+                status: "failed"
+            }, response)
+        }
     }
 
     value.email = (value.email).toLowerCase();
