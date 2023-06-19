@@ -7,11 +7,24 @@ import { USER_ROLE, USER_STATUS } from "../config/constants/enum/auth";
 
 export const fetchAnalyticsController = async (request: Request|any, response: Response)=>{
     try {
-        const { date = 'now' } = request.query;
+        const { date = 'now', dateEnded = '' } = request.query;
         // console.log((new Date()).toISOString())
         // console.log((new Date(date)).toDateString(), "before")
         const __date = moment((new Date(date)).toDateString()).format("MMMM DD YYYY");
-        console.log(__date+'%', "after")
+        const __dateRaw = moment((new Date(date)).toDateString());
+        const __dateRawOb = {
+            day: __dateRaw.format('DD'),
+            month: __dateRaw.format('MM'),
+            year: __dateRaw.format('YYYY')
+        };
+        
+        const __dateRawEnd = moment((new Date(dateEnded || '')).toDateString());
+        const __dateRawEndedOb = {
+            day: __dateRawEnd.format('DD'),
+            month: __dateRawEnd.format('MM'),
+            year: __dateRawEnd.format('YYYY')
+        };
+        // console.log(__date+'%', "after")
         
         const dataToReturn = {
             users: [],
@@ -39,10 +52,24 @@ export const fetchAnalyticsController = async (request: Request|any, response: R
         let ___users = [];
         for (let i = 0; i < __users.length; i++) {
             const item = __users[i];
-            console.log(`${item.createdAt}`)
-            if( (`${item?.createdAt}` || "").includes(__date)){
+            let tmpDate = moment(item.createdAt);
+            const __tmpDateOb = {
+                day: tmpDate.format('DD'),
+                month: tmpDate.format('MM'),
+                year: tmpDate.format('YYYY')
+            };
+            // console.log(__tmpDateOb, ' :log1')
+
+            console.log((parseInt(__tmpDateOb.year) <= parseInt(__dateRawEndedOb.year) ), __dateRawEndedOb.year, __tmpDateOb.year)
+            console.log(( parseInt(__tmpDateOb.year) >= parseInt(__dateRawOb.year)))
+            if( ( parseInt(__tmpDateOb.year) >= parseInt(__dateRawOb.year) && parseInt(__tmpDateOb.year) <= parseInt(__dateRawEndedOb.year) ) &&
+            ( parseInt(__tmpDateOb.month) >= parseInt(__dateRawOb.month) && parseInt(__tmpDateOb.month) <= parseInt(__dateRawEndedOb.month)  ) ){
                 ___users.push(item)
             }
+            
+            // if( (`${item?.createdAt}` || "").includes(__date)){
+                //     ___users.push(item)
+            // }
         }
         dataToReturn.users = ___users;
         allData.users = __users;
@@ -54,10 +81,22 @@ export const fetchAnalyticsController = async (request: Request|any, response: R
         let ___likes = [];
         for (let i = 0; i < __likes.length; i++) {
             const item = __likes[i];
-            console.log(`${item.createdAt}`)
-            if( (`${item?.createdAt}` || "").includes(__date)){
+            // console.log(`${item.createdAt}`)
+            let tmpDate = moment(item.createdAt);
+            const __tmpDateOb = {
+                day: tmpDate.format('DD'),
+                month: tmpDate.format('MM'),
+                year: tmpDate.format('YYYY')
+            };
+            // console.log(__tmpDateOb, ' :log1')
+
+            if( ( parseInt(__tmpDateOb.year) >= parseInt(__dateRawOb.year) && parseInt(__tmpDateOb.year) <= parseInt(__dateRawEndedOb.year) ) &&
+            ( parseInt(__tmpDateOb.month) >= parseInt(__dateRawOb.month) && parseInt(__tmpDateOb.month) <= parseInt(__dateRawEndedOb.month) ) ){
                 ___likes.push(item)
             }
+            // if( (`${item?.createdAt}` || "").includes(__date)){
+            //     ___likes.push(item)
+            // }
         }
         dataToReturn.likes = ___likes;
         allData.likes = __likes;
@@ -68,10 +107,22 @@ export const fetchAnalyticsController = async (request: Request|any, response: R
         let ___comments = [];
         for (let i = 0; i < __comments.length; i++) {
             const item = __comments[i];
-            console.log(`${item.createdAt}`)
-            if( (`${item?.createdAt}` || "").includes(__date)){
+            // console.log(`${item.createdAt}`)
+            let tmpDate = moment(item.createdAt);
+            const __tmpDateOb = {
+                day: tmpDate.format('DD'),
+                month: tmpDate.format('MM'),
+                year: tmpDate.format('YYYY')
+            };
+            // console.log(__tmpDateOb, ' :log1')
+
+            if( ( parseInt(__tmpDateOb.year) >= parseInt(__dateRawOb.year) && parseInt(__tmpDateOb.year) <= parseInt(__dateRawEndedOb.year) ) &&
+            ( parseInt(__tmpDateOb.month) >= parseInt(__dateRawOb.month) && parseInt(__tmpDateOb.month) <= parseInt(__dateRawEndedOb.month) )){
                 ___comments.push(item)
             }
+            // if( (`${item?.createdAt}` || "").includes(__date)){
+            //     ___comments.push(item)
+            // }
         }
         dataToReturn.comments = ___comments;
         allData.comments = __comments;
@@ -83,10 +134,22 @@ export const fetchAnalyticsController = async (request: Request|any, response: R
         let ___sharecount = [];
         for (let i = 0; i < __sharecount.length; i++) {
             const item = __sharecount[i];
-            console.log(`${item.createdAt}`)
-            if( (`${item?.createdAt}` || "").includes(__date)){
+            // console.log(`${item.createdAt}`)
+            let tmpDate = moment(item.createdAt);
+            const __tmpDateOb = {
+                day: tmpDate.format('DD'),
+                month: tmpDate.format('MM'),
+                year: tmpDate.format('YYYY')
+            };
+            // console.log(__tmpDateOb, ' :log1')
+
+            if( ( parseInt(__tmpDateOb.year) >= parseInt(__dateRawOb.year) && parseInt(__tmpDateOb.year) <= parseInt(__dateRawEndedOb.year) ) &&
+            ( parseInt(__tmpDateOb.month) >= parseInt(__dateRawOb.month) && parseInt(__tmpDateOb.month) <= parseInt(__dateRawEndedOb.month) )){
                 ___sharecount.push(item)
             }
+            // if( (`${item?.createdAt}` || "").includes(__date)){
+            //     ___sharecount.push(item)
+            // }
         }
         dataToReturn.shares = ___sharecount;
         allData.shares = __sharecount;
