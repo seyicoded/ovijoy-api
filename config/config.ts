@@ -8,7 +8,11 @@ export default ()=>{
           "database": process.env.DB_NAME,
           "host": process.env.DB_HOST,
           "dialect": process.env.DB_DIALECT,
-          "logging": false
+          "logging": false,
+          "ssl": {
+            "require": (process.env.DB_SSL == 'yes') ? true : false,
+            rejectUnauthorized: false,
+          }
         },
         "test": {
           "username": process.env.DB_USERNAME,
@@ -16,7 +20,11 @@ export default ()=>{
           "database": process.env.DB_NAME,
           "host": process.env.DB_HOST,
           "dialect": process.env.DB_DIALECT,
-          "logging": false
+          "logging": false,
+          "ssl": {
+            "require": (process.env.DB_SSL == 'yes') ? true : false,
+            rejectUnauthorized: false,
+          }
         },
         "production": {
           "username": process.env.DB_USERNAME,
@@ -24,7 +32,11 @@ export default ()=>{
           "database": process.env.DB_NAME,
           "host": process.env.DB_HOST,
           "dialect": process.env.DB_DIALECT,
-          "logging": false
+          "logging": false,
+          "ssl": {
+            "require": (process.env.DB_SSL == 'yes') ? true : false,
+            rejectUnauthorized: false,
+          }
         }
       }
       
