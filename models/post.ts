@@ -25,6 +25,10 @@ module.exports = (sequelize, DataTypes) => {
     country: DataTypes.STRING,
     status: DataTypes.INTEGER,
     views: DataTypes.INTEGER,
+    default: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0
+    }
   }, {
     sequelize,
     modelName: 'post',
