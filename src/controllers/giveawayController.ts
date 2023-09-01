@@ -9,6 +9,7 @@ import { POST_STATUS } from "../config/constants/enum/others";
 import {Op} from 'sequelize'
 import { updateGiveawayViewCountController } from "./viewController";
 import { USER_ROLE } from "../config/constants/enum/auth";
+import moment from "moment";
 // import formidable from 'formidable'
 const formidable = require('formidable');
 
@@ -253,6 +254,9 @@ export const getGiveawayController = async (request: Request|any, response: Resp
         
         for (let i = 0; i < allPost.length; i++) {
             const _post = allPost[i].get();
+            if(moment().diff(moment(_post.createdAt), 'hours') >= 24){
+                continue;
+            }
             
             const userHasLiked = (await db.likes.findOne({
                 where: {

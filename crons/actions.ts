@@ -9,9 +9,9 @@ const cronAction = (command: string, func: Function)=>{
 }
 
 export const cronActionTrigger = ()=>{
-    cronAction('1 1 1 * * *', removeExpiredStatus);
+    cronAction('1 1 1-30/2 * *', removeExpiredStatus);
     // cronAction('* * * * * *', removeExpiredGiveaway);
-    cronAction('1 1 1 * * *', removeExpiredGiveaway);
+    cronAction('1 1 1-30/2 * *', removeExpiredGiveaway);
 }
 
 const removeExpiredStatus = async ()=>{

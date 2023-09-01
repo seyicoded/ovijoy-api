@@ -8,6 +8,7 @@ import path from 'path'
 import { POST_STATUS, STATUS_STATUS } from "../config/constants/enum/others";
 import { updateStatusViewCountController } from "./viewController";
 import { USER_ROLE } from "../config/constants/enum/auth";
+import moment from "moment";
 // import formidable from 'formidable'
 const formidable = require('formidable');
 
@@ -262,6 +263,9 @@ export const getStatusController = async (request: Request | any, response: Resp
 
         for (let i = 0; i < allPostStatus.length; i++) {
             const _status = allPostStatus[i].get();
+            if(moment().diff(moment(_status.createdAt), 'hours') >= 24){
+                continue;
+            }
 
             const userHasLiked = (await db.likes.findOne({
                 where: {
