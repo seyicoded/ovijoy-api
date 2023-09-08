@@ -347,6 +347,8 @@ export const loginController = async (request: Request, response: Response)=>{
     // validate 
     const {error, value} = Joi.object(loginUserScheme).validate(data)
 
+    const email = value.toLowerCase();
+
     if(error){
         return WrapperResponse("error", {
             message: error.message,
@@ -358,8 +360,8 @@ export const loginController = async (request: Request, response: Response)=>{
     const user = await db.users.findOne({
         where: {
             [Op.or]: [
-                { email: value.email },
-                { username: value.email },
+                { email: email },
+                { username: email },
             ]
         },
         include: [db.staffrole]

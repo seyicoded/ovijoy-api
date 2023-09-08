@@ -90,6 +90,40 @@ export const getProfileController = async (request: Request|any, response: Respo
     }
 }
 
+export const myReferralController = async (request: Request|any, response: Response)=>{
+    try{
+        let { username } = await db.users.findOne(
+        {
+            where: {
+                id: request.user.id
+            }
+        });
+
+        let myReferrals = [];
+
+        if(username){
+            myReferrals = await db.users.findAll({
+                where: {
+                    refer_by_username: username
+                }
+            })
+        }
+
+
+        return WrapperResponse("success", {
+            message: "Fetched Successfully",
+            status: "success",
+            payload: myReferrals
+        }, response)
+        
+    }catch(e){
+        return WrapperResponse("error", {
+            message: "Error",
+            status: "failed"
+        }, response)
+    }
+}
+
 export const updateProfileController = async (request: Request|any, response: Response)=>{
     try{
         const user = request.user;

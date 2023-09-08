@@ -5,7 +5,7 @@ import { toggleCommentController } from '../controllers/commentController';
 import { alterInvitation, createGroup, inviteGroup, myCreatedGroup, viewInvitation } from '../controllers/groupController';
 import { toggleLikeController } from '../controllers/likeController';
 import { createPostController, deletePostController, editPostController, getPostController } from '../controllers/postController';
-import { getProfileController, updateProfileController, updateProfileImageController } from '../controllers/profileController';
+import { getProfileController, myReferralController, updateProfileController, updateProfileImageController } from '../controllers/profileController';
 import { approveStatusController, createStatusController, deleteStatusController, editStatusController, getStatusController } from '../controllers/statusController';
 import { authAdminMiddleWare, authMiddleWare } from '../middleware/auth';
 import { createGiveawayController, createGiveawayWinnerController, deleteGiveawayController, editGiveawayController, getGiveawayController, getGiveawayWinnerController } from '../controllers/giveawayController';
@@ -92,6 +92,7 @@ router.post("/bookmark/move", authMiddleWare, moveBookmarkToCollection)
 router.post("/profile/update", authMiddleWare, updateProfileImageController) 
 router.get("/profile", authMiddleWare, getProfileController) 
 router.patch("/profile", authMiddleWare, updateProfileController) 
+router.get("/profile/my-referral", authMiddleWare, myReferralController) 
 
 
 // staff management...
