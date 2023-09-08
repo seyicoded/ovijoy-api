@@ -347,7 +347,7 @@ export const loginController = async (request: Request, response: Response)=>{
     // validate 
     const {error, value} = Joi.object(loginUserScheme).validate(data)
 
-    const email = value.toLowerCase();
+    const email = value.email.toLowerCase();
 
     if(error){
         return WrapperResponse("error", {
