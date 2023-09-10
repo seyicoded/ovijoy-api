@@ -18,7 +18,7 @@ export const fetchAnalyticsController = async (request: Request|any, response: R
             year: __dateRaw.format('YYYY')
         };
         
-        const __dateRawEnd = moment((new Date(dateEnded || '')).toISOString());
+        const __dateRawEnd = moment((new Date(dateEnded || 'now')).toISOString());
         const __dateRawEndedOb = {
             day: __dateRawEnd.format('DD'),
             month: __dateRawEnd.format('MM'),
