@@ -10,15 +10,15 @@ export const fetchAnalyticsController = async (request: Request|any, response: R
         const { date = 'now', dateEnded = '' } = request.query;
         // console.log((new Date()).toISOString())
         // console.log((new Date(date)).toDateString(), "before")
-        const __date = moment((new Date(date)).toDateString()).format("MMMM DD YYYY");
-        const __dateRaw = moment((new Date(date)).toDateString());
+        const __date = moment((new Date(date)).toISOString()).format("MMMM DD YYYY");
+        const __dateRaw = moment((new Date(date)).toISOString());
         const __dateRawOb = {
             day: __dateRaw.format('DD'),
             month: __dateRaw.format('MM'),
             year: __dateRaw.format('YYYY')
         };
         
-        const __dateRawEnd = moment((new Date(dateEnded || '')).toDateString());
+        const __dateRawEnd = moment((new Date(dateEnded || '')).toISOString());
         const __dateRawEndedOb = {
             day: __dateRawEnd.format('DD'),
             month: __dateRawEnd.format('MM'),
