@@ -7,7 +7,7 @@ import { USER_ROLE, USER_STATUS } from "../config/constants/enum/auth";
 
 export const fetchAnalyticsController = async (request: Request|any, response: Response)=>{
     try {
-        const { date = 'now', dateEnded = '' } = request.query;
+        const { date = 'now', dateEnded = 'now' } = request.query;
         // console.log((new Date()).toISOString())
         // console.log((new Date(date)).toDateString(), "before")
         const __date = moment((new Date(date)).toISOString()).format("MMMM DD YYYY");
@@ -181,6 +181,70 @@ export const fetchAnalyticsController = async (request: Request|any, response: R
                     stat: statAllData,
                     data: allData
                 }
+            }
+        }, response)
+    } catch (e) {
+        console.log(e)
+        return WrapperResponse("error", {
+            message: "Error",
+            status: "failed"
+        }, response)
+    }
+}
+
+export const fetchAnalyticsYearController = async (request: Request|any, response: Response)=>{
+    try {
+        const { year = (new Date()).getFullYear() } = request.query;
+        // console.log((new Date()).toISOString())
+        // console.log((new Date(date)).toDateString(), "before")
+        // const __date = moment((new Date(date)).toISOString()).format("MMMM DD YYYY");
+        // const __dateRaw = moment((new Date(date)).toISOString());
+        const __dateRawOb = {
+            year: year
+        };
+        
+        const dataToReturn = {
+            users: []
+        }
+
+        
+        // fetch :users: record per month
+        const __users = await db.users.findAll({
+            where: {
+                role: USER_ROLE.USER,
+                status: USER_STATUS.ACTIVE
+            }
+        })
+
+        let ___users = [];
+        for (let i = 0; i < __users.length; i++) {
+            const item = __users[i];
+            let tmpDate = moment(item.createdAt);
+            const __tmpDateOb = {
+                year: tmpDate.format('YYYY')
+            };
+
+            if( 
+                ( parseInt(__tmpDateOb.year) == parseInt(__dateRawOb.year) ) 
+            ){
+                ___users.push(item);
+            }
+            
+        }
+        dataToReturn.users = ___users;
+        
+
+        const stat = {
+            users: (dataToReturn.users).length
+        }
+
+        return WrapperResponse("success", {
+            message: "Fetched Successfully",
+            status: "success",
+            // payload: {date: __date.format("YYYY-MM-DD")}
+            payload: {
+                stat,
+                data: dataToReturn,
             }
         }, response)
     } catch (e) {

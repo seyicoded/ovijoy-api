@@ -14,7 +14,7 @@ import { addPostToBookmark, createCollection, fetchCollections, moveBookmarkToCo
 import { updateViewController } from '../controllers/viewController';
 import { createStaffController, deleteStaffController, fetchStaffRoleController, getStaffController, toggleStaffStatusController } from '../controllers/staffController';
 import { getUsersController, recordShareController } from '../controllers/userController';
-import { fetchAnalyticsController } from '../controllers/statController';
+import { fetchAnalyticsController, fetchAnalyticsYearController } from '../controllers/statController';
 
 const router = express.Router()
 
@@ -114,6 +114,7 @@ router.get("/giveaway/winner", authAdminMiddleWare, getGiveawayWinnerController)
 
 // get analytics data
 router.get("/analytics", authAdminMiddleWare, fetchAnalyticsController) 
+router.get("/analytics-year", authAdminMiddleWare, fetchAnalyticsYearController) 
 
 
 // auth route::old
