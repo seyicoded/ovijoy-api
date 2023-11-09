@@ -13,7 +13,7 @@ import { getNotification } from '../controllers/notiController';
 import { addPostToBookmark, createCollection, fetchCollections, moveBookmarkToCollection } from '../controllers/bookmarkController';
 import { updateViewController } from '../controllers/viewController';
 import { createStaffController, deleteStaffController, fetchStaffRoleController, getStaffController, toggleStaffStatusController } from '../controllers/staffController';
-import { getUsersController, recordShareController } from '../controllers/userController';
+import { deleteUsersController, getUsersController, recordShareController } from '../controllers/userController';
 import { fetchAnalyticsController, fetchAnalyticsYearController } from '../controllers/statController';
 
 const router = express.Router()
@@ -63,6 +63,7 @@ router.post("/giveaway", authAdminMiddleWare, createGiveawayController)
 router.patch("/giveaway", authAdminMiddleWare, editGiveawayController) 
 router.delete("/giveaway/:id", authAdminMiddleWare, deleteGiveawayController) 
 
+router.delete("/account", authMiddleWare, deleteUsersController) 
 
 // generic
 // **** share **** 

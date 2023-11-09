@@ -30,6 +30,35 @@ export const getUsersController = async (request: Request|any, response: Respons
     }
 }
 
+export const deleteUsersController = async (request: Request|any, response: Response)=>{
+    try {
+        // console.log(request.user);
+        request.user.status = USER_STATUS.DELETED;
+
+        await request.user.save();
+        // const _data = await db.users.findAll({
+        //     where: {
+        //         role: USER_ROLE.USER,
+        //         [Op.not]: [
+        //             {status: USER_STATUS.DELETED}
+        //         ]
+        //     },
+        // })
+
+        return WrapperResponse("success", {
+            message: "Fetch Successfully",
+            status: "success",
+            payload: null
+        }, response)
+    } catch (e) {
+        console.log(e)
+        return WrapperResponse("error", {
+            message: "An error occurred",
+            status: "failed"
+        }, response)  
+    }
+}
+
 export const recordShareController = async (request: Request|any, response: Response)=>{
     try {
         await db.sharecount.create({

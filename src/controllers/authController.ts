@@ -362,6 +362,9 @@ export const loginController = async (request: Request, response: Response)=>{
             [Op.or]: [
                 { email: email },
                 { username: email },
+            ],
+            [Op.not]: [
+                {status: USER_STATUS.DELETED}
             ]
         },
         include: [db.staffrole]
