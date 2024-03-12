@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "build": "npx tsc",
-    "start": "node dist/index.js",
+    "start": "ts-node index.ts",
     "dev": "nodemon",
     "forever": "ts-node index.ts"
   },
